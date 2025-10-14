@@ -1,0 +1,195 @@
+/*
+quiz-node/
+├── api/
+│   ├── questions.js      <-- API đọc câu hỏi (sheet default)
+│   ├── student.js        <-- API đọc danh sách lớp (sheet dsLop)
+│   └── saveResult.js     <-- API lưu kết quả (ghi vào Results.xlsx)
+├── data/
+│   └── questions.xlsx    <-- (Bạn cần thêm file này)
+├── index.html
+├── app.js
+├── package.json
+└── README.md
+*/
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chương trình Trắc nghiệm</title>
+    <style>
+        /* Thiết lập cơ bản */
+        body { 
+            font-family: 'Inter', Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 20px auto; 
+            padding: 20px; 
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        h1 {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        /* Phần thông tin học sinh */
+        #student-info {
+          background-color: #fff;
+          border: 1px solid #dee2e6;
+          padding: 20px;
+          border-radius: 12px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+          margin-bottom: 30px;
+        }
+        #student-info h3 {
+          margin-top: 0;
+          color: #007bff;
+        }
+        #student-info label {
+          display: block;
+          margin-bottom: 6px;
+          font-weight: 500;
+        }
+        /* Cập nhật style cho cả input và select */
+        #student-info input, #student-info select {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 15px;
+          border: 1px solid #ced4da;
+          border-radius: 6px;
+          font-size: 1em;
+        }
+        
+        /* Màu cho input tên tự động điền */
+        #student-name[disabled] {
+            background-color: #f0f7ff;
+            color: #007bff;
+            border-color: #007bff;
+            font-weight: bold;
+        }
+
+
+        /* Khung câu hỏi */
+        .question-box { 
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            padding: 20px; 
+            margin-bottom: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        h4 {
+            margin-top: 0;
+            color: #495057;
+        }
+
+        /* Tùy chọn đáp án */
+        .options {
+            margin-top: 15px;
+        }
+        .option-label {
+            display: block;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: background-color 0.2s, border-color 0.2s;
+            cursor: pointer;
+            border: 1px solid #ced4da; /* Đường viền nhẹ */
+        }
+        
+        /* Hiệu ứng Hover và Trạng thái Đã chọn (trước khi nộp bài) */
+        .option-label:hover {
+            background-color: #e9ecef;
+        }
+        .option-label:has(input:checked) {
+            background-color: #d1e7dd; /* Xanh lá nhạt khi chọn */
+            border-color: #badbcc;
+        }
+
+        /* Ẩn input gốc và thay bằng styled input nếu muốn tùy chỉnh thêm */
+        .options input {
+            margin-right: 10px;
+            /* Nếu muốn ẩn input gốc: appearance: none; */
+        }
+        .options span {
+            font-size: 1.05em;
+        }
+
+        /* Nút Nộp bài */
+        #submit-btn {
+            
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            margin-top: 30px;
+        }
+        #submit-btn:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+        
+        /* Hiển thị kết quả */
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #ffc107;
+            border-radius: 12px;
+            background-color: #fff3cd;
+            text-align: center;
+        }
+        
+        /* Giải thích đáp án */
+        .explanation {
+            border-top: 1px dashed #ced4da;
+            padding-top: 10px !important;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Kiểm tra trắc nghiệm</h1>
+    
+    <div id="student-info" style="margin-bottom: 30px;">
+        
+      <h3>Thông tin học sinh</h3>
+      
+      <!-- CẬP NHẬT: Thay input bằng select cho Lớp -->
+      <label for="student-class">Lớp:</label>
+      <select id="student-class" required>
+        <option value="">-- Đang tải Lớp... --</option>
+      </select>
+      
+      <label for="student-stt">Số thứ tự (STT):</label>
+      <input type="number" id="student-stt" required placeholder="Nhập số thứ tự">
+
+      <label for="student-name">Họ và tên:</label>
+      <!-- CẬP NHẬT: Thêm disabled cho Tên Học sinh -->
+      <input type="text" id="student-name" disabled required placeholder="Tên học sinh sẽ tự động điền">
+
+      
+      <button id="start-btn" style="padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">Làm bài</button>
+
+    </div>
+    
+    <div id="quiz-container" style="display: none;">
+        <!-- Nội dung sẽ được tải bởi app.js -->
+        Đang tải câu hỏi...
+    </div>
+    
+    <button id="submit-btn" style="display: none;">NỘP BÀI</button>
+    
+    <div id="result"></div>
+    
+    <!-- Liên kết tới file JavaScript logic -->
+    <script src="app.js"></script>
+</body>
+</html>

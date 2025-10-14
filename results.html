@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Bảng điểm học sinh</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    select {
+      padding: 8px;
+      margin-right: 10px;
+      font-size: 1em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #eee;
+    }
+    .summary {
+      font-size: 1.1em;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Bảng điểm học sinh</h1>
+
+  <label for="classFilter">Lọc theo lớp:</label>
+  <select id="classFilter">
+    <option value="">-- Chọn lớp --</option>
+  </select>
+
+  <label for="sortOption">Sắp xếp theo:</label>
+  <select id="sortOption">
+    <option value="stt">Số thứ tự tăng dần</option>
+    <option value="score">Điểm từ cao đến thấp</option>
+  </select>
+
+  <div class="summary" id="summary" style="display: none;"></div>
+
+  <table id="scoreTable" style="display: none;">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Họ tên</th>
+        <th>Lớp</th>
+        <th>Thời gian nộp</th>
+        <th>Điểm</th>
+        <th>Tổng số câu</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    let fullData = [];
+    let currentFiltered = [];
+
+    function renderTable(data) {
+      const tbody = document.querySelector('#scoreTable tbody');
+      tbody.innerHTML = '';
+
+      let fullScoreCount = 0;
+      let belowHalfCount = 0;
+
+      const sortOption = document.getElementById('sortOption').value;
+      if (sortOption === 'score') {
+        data.sort((a, b) => b.score - a.score);
+      } else {
+        data.sort((a, b) => parseInt(a.stt) - parseInt(b.stt));
+      }
+
+      data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.stt}</td>
+          <td>${item.name}</td>
+          <td>${item.class}</td>
+          <td>${item.time}</td>
+          <td>${item.score}</td>
+          <td>${item.total}</td>
+        `;
+        tbody.appendChild(row);
+
+        if (item.score === item.total) fullScoreCount++;
+        if (item.score < item.total / 2) belowHalfCount++;
+      });
+
+      const summary = document.getElementById('summary');
+      const scoreTable = document.getElementById('scoreTable');
+
+      if (data.length > 0) {
+        scoreTable.style.display = 'table';
+        summary.style.display = 'block';
+        summary.innerHTML = `
+          📘 Lớp: <strong>${data[0].class}</strong><br>
+          👥 Số học sinh: <strong>${data.length}</strong><br>
+          ✅ Làm đúng toàn bộ: <strong>${fullScoreCount}</strong><br>
+          ⚠️ Dưới phân nửa: <strong>${belowHalfCount}</strong>
+        `;
+      } else {
+        scoreTable.style.display = 'none';
+        summary.style.display = 'none';
+        summary.innerHTML = '';
+      }
+    }
+
+    function populateClassFilter(data) {
+      const classes = [...new Set(data.map(item => item.class).filter(Boolean))].sort();
+      const select = document.getElementById('classFilter');
+      select.innerHTML = '<option value="">-- Chọn lớp --</option>';
+      classes.forEach(cls => {
+        const option = document.createElement('option');
+        option.value = cls;
+        option.textContent = cls;
+        select.appendChild(option);
+      });
+    }
+
+    document.getElementById('classFilter').addEventListener('change', function () {
+      const selected = this.value;
+      currentFiltered = selected ? fullData.filter(item => item.class === selected) : [];
+      renderTable(currentFiltered);
+    });
+
+    document.getElementById('sortOption').addEventListener('change', function () {
+      if (currentFiltered.length > 0) {
+        renderTable(currentFiltered);
+      }
+    });
+
+    fetch('/api/results')
+      .then(res => res.json())
+      .then(json => {
+        fullData = json.data || [];
+        populateClassFilter(fullData);
+        // Không hiển thị bảng điểm khi chưa chọn lớp
+      })
+      .catch(err => {
+        document.body.innerHTML = '<p style="color:red;">Lỗi khi tải dữ liệu bảng điểm.</p>';
+        console.error(err);
+      });
+  </script>
+
+</body>
+</html>
