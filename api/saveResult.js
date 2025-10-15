@@ -3,7 +3,7 @@ const { JWT } = require('google-auth-library');
 const { google } = require('googleapis');
 
 // >>> CẬP NHẬT ID SHEET CỦA BẠN TẠI ĐÂY <<<
-const SPREADSHEET_ID = '1bMFG63tiI26zihr8BD-7Hs2hNsW0bnoc';
+const SPREADSHEET_ID = '1qL9ZtIzB_IWhGpzQEFAN_RaUVgy3wKKGmls98PzXsEY';
 // Tên sheet bạn muốn ghi dữ liệu vào
 const SHEET_NAME = 'results'; 
 
