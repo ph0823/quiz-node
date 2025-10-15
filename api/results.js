@@ -1,27 +1,27 @@
-const { GoogleAuth } = require('google-auth-library');
+
+const { JWT } = require('google-auth-library');
 const { google } = require('googleapis');
 
-// Đổi thành ID Google Sheet của bạn
+// >>> CẬP NHẬT ID SHEET CỦA BẠN TẠI ĐÂY <<<
 const SPREADSHEET_ID = '1bMFG63tiI26zihr8BD-7Hs2hNsW0bnoc';
-// Đổi thành tên sheet bạn muốn đọc dữ liệu
+// Tên sheet bạn muốn đọc dữ liệu
 const SHEET_NAME = 'results'; 
 
 module.exports = async (req, res) => {
     try {
         // 1. Tải thông tin tài khoản dịch vụ từ biến môi trường
-        // PHẢI sử dụng Service Account Key vì đây là hàm Server-side
         const keyFile = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
 
-        // 2. Xác thực với Google Sheets API
-        const auth = new GoogleAuth({
-            credentials: keyFile,
+        // 2. Xác thực JWT (Phương thức được khuyến nghị)
+        const auth = new JWT({
+            email: keyFile.client_email,
+            key: keyFile.private_key,
             scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'], // Chỉ cần quyền đọc
         });
 
         const sheets = google.sheets({ version: 'v4', auth });
 
-        // 3. Đọc toàn bộ dữ liệu từ Sheet
-        // Giả định dữ liệu nằm trong phạm vi từ A đến F (các cột tóm tắt chính)
+        // 3. Đọc dữ liệu tóm tắt từ Sheet (Cột A đến F)
         const range = `${SHEET_NAME}!A:F`; 
         
         const response = await sheets.spreadsheets.values.get({
@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
             range: range,
         });
 
-        // Hàng đầu tiên thường là Header
+        // Hàng đầu tiên thường là Header, bỏ qua
         const [header, ...rows] = response.data.values || [];
         
         if (rows.length === 0) {
@@ -47,15 +47,16 @@ module.exports = async (req, res) => {
             if (DiemTong && TongSoCau) {
                  const key = `${STT}_${HoTen}_${Lop}_${ThoiGianNop}`;
                  
-                 // Chỉ thêm nếu chưa có (Tránh trùng lặp nếu sheet có lỗi)
+                 // Chỉ thêm nếu chưa có (lấy kết quả nộp đầu tiên/duy nhất)
                  if (!grouped[key]) {
                      grouped[key] = {
                          stt: STT,
                          name: HoTen,
                          class: Lop,
                          time: ThoiGianNop,
-                         score: parseFloat(DiemTong),
-                         total: parseFloat(TongSoCau)
+                         // Chuyển sang số để sắp xếp và hiển thị dễ hơn
+                         score: parseFloat(DiemTong) || 0,
+                         total: parseFloat(TongSoCau) || 0
                      };
                  }
             }
@@ -63,7 +64,7 @@ module.exports = async (req, res) => {
 
         // 5. Trả về kết quả
         const resultList = Object.values(grouped).sort((a, b) => {
-            // Sắp xếp lại theo STT (Nếu STT là số)
+            // Sắp xếp lại theo STT
             return parseInt(a.stt) - parseInt(b.stt);
         });
 
