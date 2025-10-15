@@ -139,6 +139,34 @@ function handleStudentDataChange() {
     }
 }
 
+// Đếm thời gian làm bài
+let timerInterval;
+let totalTime = 10 * 60; // ví dụ: 10 phút = 600 giây
+
+function startTimer() {
+  const timerDisplay = document.getElementById('timer');
+  const timerBox = document.getElementById('timer-box');
+  timerBox.style.display = 'block';
+
+  let timeLeft = totalTime;
+
+  timerInterval = setInterval(() => {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      timerDisplay.textContent = 'Hết giờ';
+      alert('⏰ Hết thời gian làm bài!');
+      document.getElementById('submit-btn').click(); // Tự động nộp bài
+    }
+
+    timeLeft--;
+  }, 1000);
+}
+
+
 // ----------------------------------------------------
 // LOGIC BÀI KIỂM TRA
 // ----------------------------------------------------
@@ -171,6 +199,8 @@ startBtn.addEventListener('click', () => {
     quizContainer.style.display = 'block';
 
     fetchQuestions();
+    startTimer();
+
 });
 
 // 1. Lấy dữ liệu câu hỏi từ Serverless Function
