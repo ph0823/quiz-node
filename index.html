@@ -153,6 +153,25 @@ quiz-node/
             padding-top: 10px !important;
         }
 
+        /* bộ đếm thời gian */
+        #timer-box {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          background-color: rgba(255, 243, 205, 0.8); /* Màu vàng nhạt có độ mờ */
+          color: #dc3545;
+          font-size: 0.95em; /* Thu nhỏ chữ */
+          font-weight: 600;
+          text-align: center;
+          padding: 8px 0;
+          border-bottom: 1px solid #ffc107;
+          z-index: 9999;
+          backdrop-filter: blur(4px); /* Hiệu ứng mờ nền */
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+
     </style>
 </head>
 <body>
@@ -176,15 +195,16 @@ quiz-node/
       <input type="text" id="student-name" disabled required placeholder="Tên học sinh sẽ tự động điền">
 
       
-      <button id="start-btn" style="padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">Làm bài</button>
-      <div id="timer-box" style="display: none; margin-bottom: 20px; font-size: 1.2em; font-weight: bold; color: #dc3545;">
-  ⏱️ Thời gian còn lại: <span id="timer">--:--</span>
-</div>
+      <button id="start-btn" style="padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">Làm bài</button>    
 
 
     </div>
     
+    <div id="timer-box">
+  ⏱️ Thời gian còn lại: <span id="timer">--:--</span></div>
+
     <div id="quiz-container" style="display: none;">
+        
         <!-- Nội dung sẽ được tải bởi app.js -->
         Đang tải câu hỏi...
     </div>

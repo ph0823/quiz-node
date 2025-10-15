@@ -319,6 +319,10 @@ function handleOptionChange(event) {
 
 // 4. Xử lý khi nộp bài và chấm điểm
 submitBtn.addEventListener('click', () => {
+
+    clearInterval(timerInterval); // Dừng đếm thời gian
+    document.getElementById('timer-box').style.display = 'none'; // Ẩn bộ đếm
+
     let score = 0;
     let quizReview = []; // Lưu trữ kết quả chi tiết từng câu hỏi
     
@@ -396,18 +400,17 @@ function renderResults(score, reviewData) {
     let html = `
         <div class="result-summary text-center">
             <h2>Kết Quả Bài Trắc Nghiệm</h2>
-            <p><strong>Họ và tên:</strong> ${studentInfo.name}</p>
-            <p><strong>Lớp:</strong> ${studentInfo.class}</p>
-            <p><strong>STT:</strong> ${studentInfo.stt}</p>
+            <p><strong>Lớp:</strong> ${studentInfo.class}<strong> -- STT:</strong> ${studentInfo.stt}</p>
+            <p><strong>Họ và tên:</strong> ${studentInfo.name}</p>            
+            
             <div class="score-display">
-                <p>Tổng điểm: <strong>${score}/${total}</strong></p>
-                <p style="color: green;">Số câu đúng: ${score}</p>
+                <p style="color: green;">Tổng điểm: <strong>${score}/${total}</strong></p>                
                 <p style="color: red;">Số câu sai: ${incorrect}</p>
             </div>
-            <button onclick="window.location.reload()" style="padding: 10px 20px; margin-top: 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Làm lại Bài Kiểm Tra</button>
+            
         </div>
         <hr>
-        <h3>Các Câu Trả Lời Sai (${incorrect} câu)</h3>
+        <h3 style="color: blue;">Các Câu Trả Lời Sai (${incorrect} câu)</h3>
         <ul class="review-list" style="list-style-type: none; padding-left: 0;">
     `;
 
