@@ -85,6 +85,7 @@ async function checkIfSubmitted() {
       startBtn.disabled = true;
       startBtn.style.backgroundColor = '#ccc';
     } else {
+      hasSubmitted = false;  
       startBtn.disabled = false;
       startBtn.style.backgroundColor = '#28a745';
     }
@@ -311,10 +312,7 @@ function renderQuiz() {
             }
         });
 
-        html += `
-                </div>
-            </div>
-        `;
+        html += `</div></div>`;
     });
     quizContainer.innerHTML = html;
 }
