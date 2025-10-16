@@ -64,6 +64,35 @@ function shuffleArray(array) {
     return array;
 }
 
+// Hàm kiểm xem đã có nộp bài chưa, nếu nộp -> vô hiệu nút 'Làm bài'
+async function checkIfSubmitted() {
+  const className = studentClassInput.value.trim();
+  const stt = studentSttInput.value.trim();
+  const name = studentNameInput.value.trim();
+
+  if (!className || !stt || !name) return;
+
+  try {
+    const res = await fetch('/api/checkSubmitted', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ className, stt, name })
+    });
+
+    const data = await res.json();
+    if (data.submitted) {
+      alert('Bạn đã hoàn thành bài kiểm tra. Không thể làm lại.');
+      startBtn.disabled = true;
+      startBtn.style.backgroundColor = '#ccc';
+    } else {
+      startBtn.disabled = false;
+      startBtn.style.backgroundColor = '#28a745';
+    }
+  } catch (err) {
+    console.error('Lỗi kiểm tra trạng thái đã nộp:', err);
+  }
+}
+
 // ----------------------------------------------------
 // LOGIC MỚI: Tải danh sách lớp và Tự động điền Tên
 // ----------------------------------------------------
@@ -129,6 +158,7 @@ function handleStudentDataChange() {
             
             if (studentName) {
                 studentNameInput.value = String(studentName).trim();
+                checkIfSubmitted(); // kiểm xem đã có nộp bài chưa, nếu nộp vô hiệu nút Làm bài
             } else {
                 studentNameInput.value = 'Không tìm thấy tên (Lỗi dữ liệu)';
             }
@@ -137,7 +167,10 @@ function handleStudentDataChange() {
             console.log(`Không tìm thấy học sinh Lớp: ${selectedClass}, STT: ${stt}`);
         }
     }
+
+
 }
+
 
 // Đếm thời gian làm bài
 let timerInterval;
@@ -390,68 +423,72 @@ submitBtn.addEventListener('click', () => {
 
 // 5. Hiển thị trang kết quả chi tiết (Chỉ hiển thị câu sai và đáp án người dùng chọn)
 function renderResults(score, reviewData) {
-    // Ẩn nút nộp bài và xóa giao diện câu hỏi
     submitBtn.style.display = 'none';
     quizContainer.innerHTML = '';
 
     const total = reviewData.length;
     const incorrect = total - score;
 
-    let html = `
+    resultDiv.innerHTML = `
         <div class="result-summary text-center">
             <h2>Kết Quả Bài Trắc Nghiệm</h2>
-            <p><strong>Lớp:</strong> ${studentInfo.class}<strong> -- STT:</strong> ${studentInfo.stt}</p>
-            <p><strong>Họ và tên:</strong> ${studentInfo.name}</p>            
-            
+            <p><strong>Lớp:</strong> ${studentInfo.class} -- <strong>STT:</strong> ${studentInfo.stt}</p>
+            <p><strong>Họ và tên:</strong> ${studentInfo.name}</p>
             <div class="score-display">
-                <p style="color: green;">Tổng điểm: <strong>${score}/${total}</strong></p>                
+                <p style="color: green;">Tổng điểm: <strong>${score}/${total}</strong></p>
                 <p style="color: red;">Số câu sai: ${incorrect}</p>
             </div>
-            
         </div>
-        <hr>
-        <h3 style="color: blue;">Các Câu Trả Lời Sai (${incorrect} câu)</h3>
-        <ul class="review-list" style="list-style-type: none; padding-left: 0;">
     `;
 
-    const answerLetters = ['A', 'B', 'C', 'D'];
+    const wrongList = reviewData.filter(item => !item.isCorrect);
+    const wrongContainer = document.getElementById('wrong-answers');
+    const showWrongBtn = document.getElementById('show-wrong-btn');
 
-    reviewData.filter(item => !item.isCorrect).forEach(item => {
-        let reviewDetail = '';
+    if (wrongList.length > 0) {
+        showWrongBtn.style.display = 'block';
 
-        for (let i = 0; i < 4; i++) {
-            const letter = answerLetters[i];
-            const answerText = item.options[i] ? String(item.options[i]) : '';
-            if (!answerText) continue;
+        let html = `<h3 style="color: blue;">Các Câu Trả Lời Sai (${incorrect} câu)</h3><ul style="list-style-type: none; padding-left: 0;">`;
 
-            let style = '';
-            let indicator = '';
+        wrongList.forEach(item => {
+            const answerLetters = ['A', 'B', 'C', 'D'];
+            let reviewDetail = '';
 
-            if (item.user.includes(letter)) {
-                style = 'background-color: #e9f5ff; border-color: #007bff; font-weight: bold; color: #007bff; border: 1px dashed;';
-                indicator = '';
+            for (let i = 0; i < 4; i++) {
+                const letter = answerLetters[i];
+                const answerText = item.options[i] ? String(item.options[i]) : '';
+                if (!answerText) continue;
+
+                let style = '';
+                if (item.user.includes(letter)) {
+                    style = 'background-color: #e9f5ff; border-color: #007bff; font-weight: bold; color: #007bff; border: 1px dashed;';
+                }
+
+                reviewDetail += `<li style="${style} padding: 8px; margin-bottom: 5px; border-radius: 4px;"><strong>${letter}.</strong> ${answerText}</li>`;
             }
 
-            reviewDetail += `<li style="${style} padding: 8px; margin-bottom: 5px; border-radius: 4px;"><strong>${letter}.</strong> ${answerText}${indicator}</li>`;
-        }
+            html += `
+                <li style="border: 1px solid #ccc; padding: 20px; margin-bottom: 20px; border-radius: 8px;">
+                    <h4>Câu ${item.index}: ${item.question}</h4>
+                    <div style="margin-top: 10px; padding: 10px; border: 1px dashed #adb5bd; border-radius: 4px; background-color: #f8f9fa;">
+                        Đáp án bạn đã chọn: <strong>${item.user.length > 0 ? item.user.join(', ') : '(Chưa chọn)'}</strong>
+                    </div>
+                    <ul style="list-style-type: none; padding: 10px 0;">${reviewDetail}</ul>
+                    ${item.explanation ? `<p style="font-size: 0.9em; padding: 10px; background-color: #f0f0f0; border-radius: 4px;"><strong>Giải thích:</strong> ${item.explanation}</p>` : ''}
+                </li>
+            `;
+        });
 
-        html += `
-            <li class="review-item" style="border: 1px solid #ccc; padding: 20px; margin-bottom: 20px; border-radius: 8px;">
-                <h4>Câu ${item.index}: ${item.question}</h4>
-                <div style="margin-top: 10px; padding: 10px; border: 1px dashed #adb5bd; border-radius: 4px; background-color: #f8f9fa;">
-                    Đáp án bạn đã chọn: <strong>${item.user.length > 0 ? item.user.join(', ') : '(Chưa chọn)'}</strong>
-                </div>
-                <ul style="list-style-type: none; padding: 10px 0;">${reviewDetail}</ul>
-                ${item.explanation ? `<p style="font-size: 0.9em; padding: 10px; background-color: #f0f0f0; border-radius: 4px;"><strong>Giải thích:</strong> ${item.explanation}</p>` : ''}
-            </li>
-        `;
-    });
+        html += '</ul>';
+        wrongContainer.innerHTML = ''; // Clear before showing
 
-    html += '</ul>';
-
-    if (incorrect === 0) {
-        html += '<p style="text-align: center; color: green; font-size: 1.2em;">Chúc mừng! Bạn đã trả lời đúng tất cả các câu hỏi.</p>';
+        showWrongBtn.onclick = () => {
+            wrongContainer.innerHTML = html;
+            showWrongBtn.style.display = 'none'; // Ẩn nút sau khi nhấn
+        };
+    } else {
+        showWrongBtn.style.display = 'none';
+        wrongContainer.innerHTML = '<p style="text-align: center; color: green; font-size: 1.2em;">Chúc mừng! Bạn đã trả lời đúng tất cả các câu hỏi.</p>';
     }
-
-    resultDiv.innerHTML = html;
 }
+

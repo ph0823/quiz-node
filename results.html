@@ -26,10 +26,19 @@
     th, td {
       border: 1px solid #ccc;
       padding: 8px 12px;
-      text-align: center;
     }
     th {
       background-color: #eee;
+      text-align: center;
+    }
+    td:nth-child(2) {
+      text-align: left; /* Họ tên canh trái */
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2; /* Nền xen kẽ */
+    }
+    .duplicate {
+      background-color: #ffe5e5 !important; /* Tô đỏ nếu trùng STT */
     }
     .summary {
       font-size: 1.1em;
@@ -63,22 +72,22 @@
         <th>Lớp</th>
         <th>Thời gian nộp</th>
         <th>Điểm</th>
-        <th>Tổng số câu</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 
+  <h3>📌 STT học sinh chưa làm bài</h3>
+  <ul id="missingList" style="padding-left: 20px;"></ul>
+
   <script>
     let fullData = [];
+    let allStudents = [];
     let currentFiltered = [];
 
     function renderTable(data) {
       const tbody = document.querySelector('#scoreTable tbody');
       tbody.innerHTML = '';
-
-      let fullScoreCount = 0;
-      let belowHalfCount = 0;
 
       const sortOption = document.getElementById('sortOption').value;
       if (sortOption === 'score') {
@@ -87,20 +96,29 @@
         data.sort((a, b) => parseInt(a.stt) - parseInt(b.stt));
       }
 
+      const seenStts = new Set();
+      let fullScoreCount = 0;
+
       data.forEach(item => {
         const row = document.createElement('tr');
+        const stt = String(item.stt).trim();
+
+        if (seenStts.has(stt)) {
+          row.classList.add('duplicate');
+        } else {
+          seenStts.add(stt);
+        }
+
         row.innerHTML = `
           <td>${item.stt}</td>
           <td>${item.name}</td>
           <td>${item.class}</td>
           <td>${item.time}</td>
           <td>${item.score}</td>
-          <td>${item.total}</td>
         `;
         tbody.appendChild(row);
 
         if (item.score === item.total) fullScoreCount++;
-        if (item.score < item.total / 2) belowHalfCount++;
       });
 
       const summary = document.getElementById('summary');
@@ -111,14 +129,37 @@
         summary.style.display = 'block';
         summary.innerHTML = `
           📘 Lớp: <strong>${data[0].class}</strong><br>
-          👥 Số học sinh: <strong>${data.length}</strong><br>
-          ✅ Làm đúng toàn bộ: <strong>${fullScoreCount}</strong><br>
-          ⚠️ Dưới phân nửa: <strong>${belowHalfCount}</strong>
+          👥 Số học sinh (STT duy nhất): <strong>${seenStts.size}</strong><br>
+          ✅ Làm đúng toàn bộ: <strong>${fullScoreCount}</strong>
         `;
       } else {
         scoreTable.style.display = 'none';
         summary.style.display = 'none';
         summary.innerHTML = '';
+      }
+
+      // Hiển thị danh sách STT chưa làm bài
+      const missingList = document.getElementById('missingList');
+      missingList.innerHTML = '';
+
+      const selectedClass = document.getElementById('classFilter').value;
+      if (!selectedClass) return;
+
+      const submittedStts = new Set(data.map(item => String(item.stt).trim()));
+      const classStudents = allStudents.filter(s => String(s.Lop).trim() === selectedClass);
+      const missingStts = classStudents
+        .map(s => String(s.STT).trim())
+        .filter(stt => !submittedStts.has(stt));
+
+      if (missingStts.length > 0) {
+        missingStts.sort((a, b) => parseInt(a) - parseInt(b));
+        missingStts.forEach(stt => {
+          const li = document.createElement('li');
+          li.textContent = `STT ${stt}`;
+          missingList.appendChild(li);
+        });
+      } else {
+        missingList.innerHTML = '<li>Tất cả học sinh trong lớp đã làm bài.</li>';
       }
     }
 
@@ -146,16 +187,26 @@
       }
     });
 
+    // Tải dữ liệu bảng điểm
     fetch('/api/results')
       .then(res => res.json())
       .then(json => {
         fullData = json.data || [];
         populateClassFilter(fullData);
-        // Không hiển thị bảng điểm khi chưa chọn lớp
       })
       .catch(err => {
         document.body.innerHTML = '<p style="color:red;">Lỗi khi tải dữ liệu bảng điểm.</p>';
         console.error(err);
+      });
+
+    // Tải danh sách học sinh
+    fetch('/api/student')
+      .then(res => res.json())
+      .then(json => {
+        allStudents = json.data || [];
+      })
+      .catch(err => {
+        console.error('Lỗi khi tải danh sách học sinh:', err);
       });
   </script>
 

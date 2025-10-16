@@ -146,6 +146,17 @@ quiz-node/
             background-color: #fff3cd;
             text-align: center;
         }
+
+        /* Hiển thị danh sách câu sai */
+        #wrong-answers {
+             
+            margin-top: 20px; 
+            padding: 10px 20px; 
+            background-color: #ffc107; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer;
+        }
         
         /* Giải thích đáp án */
         .explanation {
@@ -195,16 +206,14 @@ quiz-node/
       <input type="text" id="student-name" disabled required placeholder="Tên học sinh sẽ tự động điền">
 
       
-      <button id="start-btn" style="padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">Làm bài</button>    
+      <button id="start-btn" style="padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">Làm bài</button>   
 
 
     </div>
     
-    <div id="timer-box">
-  ⏱️ Thời gian còn lại: <span id="timer">--:--</span></div>
+    <div id="timer-box">  ⏱️ Thời gian còn lại: <span id="timer">--:--</span></div>
 
-    <div id="quiz-container" style="display: none;">
-        
+    <div id="quiz-container" style="display: none;">        
         <!-- Nội dung sẽ được tải bởi app.js -->
         Đang tải câu hỏi...
     </div>
@@ -212,7 +221,9 @@ quiz-node/
     <button id="submit-btn" style="display: none;">NỘP BÀI</button>
     
     <div id="result"></div>
-    
+    <button id="show-wrong-btn" style="display: none;">Danh sách câu sai</button>
+    <div id="wrong-answers" style="margin-top: 20px;"></div>
+
     <!-- Liên kết tới file JavaScript logic -->
     <script src="app.js"></script>
 </body>
