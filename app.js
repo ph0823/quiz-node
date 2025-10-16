@@ -8,6 +8,9 @@ const studentClassInput = document.getElementById('student-class');
 const studentSttInput = document.getElementById('student-stt');
 const studentNameInput = document.getElementById('student-name');
 
+// biến lưu trữ trạng thái đã làm bài
+let hasSubmitted = false;
+
 let questions = [];
 // Lưu trữ đáp án của người dùng: {ID_cau_hoi: [dap_an_chon_1, dap_an_chon_2, ...]}
 let userAnswers = {}; 
@@ -81,6 +84,7 @@ async function checkIfSubmitted() {
 
     const data = await res.json();
     if (data.submitted) {
+      hasSubmitted = true;  
       alert('Bạn đã hoàn thành bài kiểm tra. Không thể làm lại.');
       startBtn.disabled = true;
       startBtn.style.backgroundColor = '#ccc';
@@ -168,8 +172,6 @@ function handleStudentDataChange() {
             console.log(`Không tìm thấy học sinh Lớp: ${selectedClass}, STT: ${stt}`);
         }
     }
-
-
 }
 
 
@@ -224,6 +226,11 @@ startBtn.addEventListener('click', () => {
          return;
     }
 
+    if (hasSubmitted) {
+        alert("Bạn đã nộp bài trước đó. Không thể làm lại.");
+        return;
+    }
+    
     studentInfo.name = name;
     studentInfo.class = className;
     studentInfo.stt = stt;
