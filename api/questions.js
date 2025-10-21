@@ -3,7 +3,7 @@
 const { JWT } = require('google-auth-library');
 const { google } = require('googleapis');
 
-// >>> CẬP NHẬT ID GOOGLE SHEET CỦA BẠN TẠI ĐÂY <<<
+// >>> CẬP NHẬT ID GOOGLE SHEET TẠI ĐÂY <<<
 const SPREADSHEET_ID = '1Jhcj54j4QFxHdFcUpIY82Nf9dC8kCs0Qv6QaZNCIp9s';
 const SHEET_QUESTION = 'Khoi7'; // Sheet chứa câu hỏi
 const SHEET_CONFIG = 'CauHinh';   // Sheet chứa cấu hình chủ đề
@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
 
     const sheets = google.sheets({ version: 'v4', auth });
 
-    // 3. Đọc dữ liệu từ sheet câu hỏi 
+    // 3. Đọc dữ liệu từ sheet câu hỏi (dòng đầu tiên là tiêu đề cột)
     const questionRes = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
       range: `${SHEET_QUESTION}!A:M`, // Giả sử có 13 cột từ A đến M
@@ -42,10 +42,10 @@ module.exports = async (req, res) => {
       return question;
     });
 
-    // 4. Đọc dữ liệu từ sheet cấu hình )
+    // 4. Đọc dữ liệu từ sheet cấu hình 
     const configRes = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_CONFIG}!C:D`, // Giả sử có 2 cột: Chủ đề, Số câu
+      range: `${SHEET_CONFIG}!C:D`,   // Cột C: Chu_de, Cột D: So_luong
     });
 
     const configRows = configRes.data.values;
