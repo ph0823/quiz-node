@@ -29,27 +29,17 @@ window.addEventListener('DOMContentLoaded', async () => {
     const savedQuestions = localStorage.getItem('quizQuestions');
 
     if (savedInfo && savedQuestions) {
+        // Khôi phục đề cũ nếu đã từng nhấn nút "Làm bài"
         studentInfo = JSON.parse(savedInfo);
         questions = JSON.parse(savedQuestions);
         questions.forEach(q => userAnswers[q.ID] = []);
 
-        // Khôi phục dữ liệu vào form
-        if (studentInfo.class) studentClassInput.value = studentInfo.class;
-        if (studentInfo.stt) studentSttInput.value = studentInfo.stt;
-
-        // Tự động điền tên học sinh nếu đủ thông tin
-        if (studentClassInput.value && studentSttInput.value) {
-            handleStudentDataChange();
-        }
-        
-        /*
         document.getElementById('student-info').style.display = 'none';
         startBtn.style.display = 'none';
         quizContainer.style.display = 'block';
         renderQuiz();
-        submitBtn.style.display = 'block';
-        */
-
+        submitBtn.style.display = 'block';        
+        startTimer();
     } else {
         // Gán sự kiện lắng nghe chỉ khi đang ở màn hình nhập thông tin (chưa làm bài)
         studentClassInput.addEventListener('change', handleStudentDataChange);
@@ -511,5 +501,25 @@ function renderResults(score, reviewData) {
         showWrongBtn.style.display = 'none';
         wrongContainer.innerHTML = '<p style="text-align: center; color: green; font-size: 1.2em;">Chúc mừng! Bạn đã trả lời đúng tất cả các câu hỏi.</p>';
     }
+    // Tạo nút Làm bài mới
+    const restartBtn = document.createElement('button');
+    restartBtn.textContent = 'Làm bài mới';
+    restartBtn.style.padding = '12px 20px';
+    restartBtn.style.backgroundColor = '#17a2b8';
+    restartBtn.style.color = 'white';
+    restartBtn.style.border = 'none';
+    restartBtn.style.borderRadius = '6px';
+    restartBtn.style.cursor = 'pointer';
+    restartBtn.style.marginTop = '20px';
+
+    // Khi nhấn: xóa dữ liệu và reload trang
+    restartBtn.onclick = () => {
+        localStorage.removeItem('studentInfo');
+        localStorage.removeItem('quizQuestions');
+        location.reload();
+    };
+
+    // Thêm nút vào phần kết quả
+    resultDiv.appendChild(restartBtn);
 }
 
