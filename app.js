@@ -24,6 +24,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     // 1. Tải danh sách lớp trước
     await fetchStudentData();
     
+    // 2. Khôi phục dữ liệu nếu có từ localStorage (nhưng không hiển thị ngay phần làm bài)
     const savedInfo = localStorage.getItem('studentInfo');
     const savedQuestions = localStorage.getItem('quizQuestions');
 
@@ -31,16 +32,30 @@ window.addEventListener('DOMContentLoaded', async () => {
         studentInfo = JSON.parse(savedInfo);
         questions = JSON.parse(savedQuestions);
         questions.forEach(q => userAnswers[q.ID] = []);
+
+        // Khôi phục dữ liệu vào form
+        if (studentInfo.class) studentClassInput.value = studentInfo.class;
+        if (studentInfo.stt) studentSttInput.value = studentInfo.stt;
+
+        // Tự động điền tên học sinh nếu đủ thông tin
+        if (studentClassInput.value && studentSttInput.value) {
+            handleStudentDataChange();
+        }
+        
+        /*
         document.getElementById('student-info').style.display = 'none';
         startBtn.style.display = 'none';
         quizContainer.style.display = 'block';
         renderQuiz();
         submitBtn.style.display = 'block';
+        */
+
     } else {
         // Gán sự kiện lắng nghe chỉ khi đang ở màn hình nhập thông tin (chưa làm bài)
         studentClassInput.addEventListener('change', handleStudentDataChange);
         studentSttInput.addEventListener('input', handleStudentDataChange);
 
+        /*
         // Khôi phục lại dữ liệu nếu có
         if (studentInfo.class) studentClassInput.value = studentInfo.class;
         if (studentInfo.stt) studentSttInput.value = studentInfo.stt;
@@ -48,10 +63,11 @@ window.addEventListener('DOMContentLoaded', async () => {
         if (studentClassInput.value && studentSttInput.value) {
             handleStudentDataChange();
         }
+        */
     }
 });
 
-// Hàm hỗ trợ: Chuyển chuỗi đáp án (từ Excel) thành mảng các chuỗi chuẩn hóa.
+// Hàm Chuyển chuỗi đáp án thành mảng các chuỗi chuẩn hóa.
 function parseCorrectAnswer(correctAnswerString) {
     if (!correctAnswerString) return [];
     // Tách chuỗi, chuyển thành chữ hoa, loại bỏ khoảng trắng.
@@ -106,7 +122,7 @@ async function checkIfSubmitted() {
 async function fetchStudentData() {
     studentClassInput.innerHTML = '<option value="">-- Đang tải Lớp... --</option>';
     try {
-        // Gọi API Vercel Serverless Function (đã tạo ở bước 3)
+        // Gọi API Vercel Serverless Function 
         const response = await fetch('/api/student'); 
         const json = await response.json();
         
@@ -125,7 +141,7 @@ async function fetchStudentData() {
 }
 
 function populateClassDropdown() {
-    // Giả sử input Lớp là thẻ <select>
+    // input Lớp là thẻ <select>
     if (studentClassInput.tagName === 'SELECT') {
         // Lấy danh sách các lớp duy nhất
         const uniqueClasses = [...new Set(allStudentList.map(s => String(s.Lop || '').trim()))].filter(c => c);
@@ -270,11 +286,11 @@ async function fetchQuestions() {
             renderQuiz();
             submitBtn.style.display = 'block';
         } else {
-            quizContainer.innerHTML = 'Không tìm thấy câu hỏi nào. Vui lòng kiểm tra file Excel.';
+            quizContainer.innerHTML = 'Không tìm thấy câu hỏi nào.';
         }
     } catch (error) {
         console.error("Lỗi khi tải câu hỏi:", error);
-        quizContainer.innerHTML = 'Lỗi kết nối hoặc lỗi server. Vui lòng chạy bằng "vercel dev".';
+        quizContainer.innerHTML = 'Lỗi kết nối hoặc lỗi server.';
     }
 }
 
@@ -397,7 +413,7 @@ submitBtn.addEventListener('click', () => {
     // Chuyển sang trang kết quả
     renderResults(score, quizReview);
 
-    // lưu kết quả vào file Data/Results.xlxs
+    // lưu kết quả vào 
     const timestamp = new Date().toLocaleString('vi-VN');
 
     fetch('/api/saveResult', {
