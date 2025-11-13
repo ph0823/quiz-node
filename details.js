@@ -1,101 +1,300 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kết Quả Bài Làm Chi Tiết</title>
-    <link rel="stylesheet" href="style.css"> 
-    <style>
-        /* Các style cũ */
-        body { background-color: #f8f9fa; padding-top: 20px; }
-        .container { max-width: 900px; margin: 30px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1 { color: #dc3545; text-align: center; margin-bottom: 25px; }
+const lookupClassInput = document.getElementById('lookup-class');
+const lookupSttInput = document.getElementById('lookup-stt');
+const lookupNameInput = document.getElementById('lookup-name');
+const lookupBtn = document.getElementById('lookup-btn');
+const lookupMessage = document.getElementById('lookup-message');
+const resultWrapper = document.getElementById('result-wrapper');
+const initialMessage = document.getElementById('initial-message');
+const detailsContainer = document.getElementById('quiz-details');
 
-        /* VÙNG LỌC TRA CỨU */
-        #lookup-area { border: 1px solid #007bff; padding: 20px; border-radius: 8px; background-color: #eaf7ff; margin-bottom: 30px; }
+const adminCodeInput = document.getElementById('admin-code');
+const unlockBtn = document.getElementById('unlock-btn');
+const traCuuForm = document.getElementById('tra-cuu-form');
+const authMessage = document.getElementById('auth-message');
+const scoreDisplay = document.getElementById('score-display');
+const modeDisplay = document.getElementById('mode-display');
+
+// MÃ KHÓA BẢO MẬT (Giáo viên cần nhập mã này. Nên được lưu trữ an toàn hơn)
+const ADMIN_SECRET_CODE = '123456'; 
+
+let allStudentList = [];
+let isTeacherMode = false;
+
+// ====================================================================================================================
+// --- KHỞI TẠO VÀ TẢI DỮ LIỆU ---
+// ====================================================================================================================
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Tải danh sách lớp trước cho chức năng tra cứu
+    await fetchStudentData();
+    
+    // 2. Gán sự kiện cho form tra cứu (Chỉ hoạt động khi Mở khóa)
+    lookupClassInput.addEventListener('change', handleLookupDataChange);
+    lookupSttInput.addEventListener('input', handleLookupDataChange);
+    lookupBtn.addEventListener('click', handleLookupClick);
+
+    // 3. Gán sự kiện Mở khóa Giáo viên
+    unlockBtn.addEventListener('click', handleUnlock);
+
+    // 4. Kiểm tra sessionStorage (Chế độ Học sinh vừa nộp bài)
+    const savedResult = sessionStorage.getItem('finalQuizResult');
+    if (savedResult) {
+        const finalResult = JSON.parse(savedResult);
+        sessionStorage.removeItem('finalQuizResult'); // Xóa ngay sau khi đọc
+        renderResult(finalResult, 'student');
+    }
+});
+
+// Hàm chuyển chuỗi đáp án thành mảng các chuỗi chuẩn hóa.
+function parseAnswerKeys(answerKeyString) {
+    if (!answerKeyString) return [];
+    return String(answerKeyString).toUpperCase().split(',').map(s => s.trim()).filter(s => s);
+}
+
+// ----------------------------------------------------
+// LOGIC: MỞ KHÓA GIÁO VIÊN
+// ----------------------------------------------------
+function handleUnlock() {
+    if (adminCodeInput.value === ADMIN_SECRET_CODE) {
+        isTeacherMode = true;
+        authMessage.textContent = 'Mở khóa thành công! Bạn có thể tra cứu bài làm.';
+        authMessage.style.color = 'green';
+        document.getElementById('auth-check').style.display = 'none';
+        traCuuForm.style.display = 'block'; // Hiển thị form tra cứu
         
-        /* Form và Input */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .form-group input:disabled { background-color: #eee; color: #666; }
-        .row { display: flex; gap: 15px; }
-        .col-4 { flex: 1; }
+        // Sau khi mở khóa, ẩn thông báo ban đầu và hiển thị vùng kết quả (trống)
+        resultWrapper.style.display = 'none';
+        initialMessage.style.display = 'block';
+        initialMessage.innerHTML = '<p>Vui lòng sử dụng chức năng tra cứu để xem chi tiết bài làm.</p>';
+        
+    } else {
+        authMessage.textContent = 'Mã khóa không đúng. Vui lòng thử lại.';
+        authMessage.style.color = 'red';
+    }
+}
 
-        /* Nút Tra Cứu/Mở khóa */
-        #lookup-btn { background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; margin-top: 15px; width: 100%; }
-        #lookup-btn:hover { background-color: #0056b3; }
-        #unlock-btn { background-color: #ffc107; color: #333; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; margin-left: 10px; }
+// ----------------------------------------------------
+// LOGIC: Tải danh sách lớp và Tự động điền Tên
+// ----------------------------------------------------
 
-        /* VÙNG HIỂN THỊ KẾT QUẢ */
-        .summary-box { text-align: center; border-bottom: 2px solid #007bff; margin-bottom: 20px; padding-bottom: 15px; }
-        .question-detail { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 6px; }
-        .correct-answer { color: green; font-weight: bold; }
-        .wrong-answer { color: red; font-weight: bold; }
-        .option-detail { padding: 5px 0; border-left: 3px solid transparent; margin-left: 10px; }
-        .selected-correct { border-left-color: green; background-color: #e6ffe6; } 
-        .selected-wrong { border-left-color: red; background-color: #ffe6e6; } 
-        .correct-key { border-left-color: blue; background-color: #e6f7ff; } 
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>📊 Chi Tiết Bài Làm</h1>
+async function fetchStudentData() {
+    lookupClassInput.innerHTML = '<option value="">-- Đang tải Lớp... --</option>';
+    try {
+        const response = await fetch('/api/student'); 
+        const json = await response.json();
+        
+        if (json.data && json.data.length > 0) {
+            allStudentList = json.data;
+            populateClassDropdown();
+        } else {
+            lookupClassInput.innerHTML = '<option value="">-- Lỗi tải lớp --</option>';
+        }
+    } catch (error) {
+        lookupClassInput.innerHTML = '<option value="">-- Lỗi kết nối --</option>';
+    }
+}
 
-        <div id="lookup-area">
-            <h2>Chế độ Tra cứu Giáo viên</h2>
-            
-            <div id="auth-check">
-                <label for="admin-code" style="display: inline-block;">Mã khóa Giáo viên:</label>
-                <input type="password" id="admin-code" placeholder="Nhập mã khóa" style="width: 250px; display: inline-block;">
-                <button id="unlock-btn">Mở khóa Tra cứu</button>
-                <p id="auth-message" style="color: red; margin-top: 5px; font-weight: bold;"></p>
-            </div>
+function populateClassDropdown() {
+    const uniqueClasses = [...new Set(allStudentList.map(s => String(s.Lop || '').trim()))].filter(c => c);
 
-            <div id="tra-cuu-form" style="display: none; margin-top: 15px; border-top: 1px solid #ccc; padding-top: 15px;">
-                <div class="row">
-                    <div class="form-group col-4">
-                        <label for="lookup-class">Lớp:</label>
-                        <select id="lookup-class" required>
-                            <option value="">-- Đang tải Lớp... --</option>
-                        </select>
+    lookupClassInput.innerHTML = '<option value="">-- Chọn Lớp --</option>';
+    uniqueClasses.sort().forEach(className => {
+        const option = document.createElement('option');
+        option.value = className;
+        option.textContent = className;
+        lookupClassInput.appendChild(option);
+    });
+}
+
+function handleLookupDataChange() {
+    const selectedClass = lookupClassInput.value.trim();
+    const stt = lookupSttInput.value.trim();
+    lookupNameInput.value = '';
+
+    if (selectedClass && stt) {
+        const foundStudent = allStudentList.find(s => 
+            String(s.Lop || '').trim() === selectedClass && 
+            String(s.STT || '').trim() === stt
+        );
+
+        if (foundStudent) {
+            const studentName = foundStudent.Ten_hoc_sinh || foundStudent.Ho_ten || foundStudent.Ten; 
+            if (studentName) {
+                lookupNameInput.value = String(studentName).trim();
+            } else {
+                lookupNameInput.value = 'Lỗi dữ liệu';
+            }
+        } else {
+            lookupNameInput.value = 'Không tìm thấy học sinh';
+        }
+    }
+}
+
+// ====================================================================================================================
+// --- LOGIC TRA CỨU KẾT QUẢ TỪ SERVER (CHẾ ĐỘ GIÁO VIÊN) ---
+// ====================================================================================================================
+
+async function handleLookupClick() {
+    if (!isTeacherMode) {
+        authMessage.textContent = 'Bạn chưa mở khóa chức năng tra cứu.';
+        return;
+    }
+    
+    const className = lookupClassInput.value.trim();
+    const stt = lookupSttInput.value.trim();
+    const name = lookupNameInput.value.trim();
+
+    if (!className || !stt || !name || name.includes('Không tìm thấy') || name.includes('Lỗi dữ liệu')) {
+        authMessage.textContent = 'Vui lòng chọn Lớp và nhập STT hợp lệ.';
+        authMessage.style.color = 'red';
+        return;
+    }
+
+    authMessage.textContent = 'Đang tra cứu kết quả...';
+    authMessage.style.color = '#007bff';
+
+    try {
+        // Gọi API tra cứu kết quả chi tiết
+        const res = await fetch('/api/lookupResultDetail', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ className, stt, name })
+        });
+
+        const data = await res.json();
+        
+        if (data.success && data.result) {
+            // ⭐ Chuyển đổi định dạng dữ liệu từ Server để phù hợp với hàm renderResult
+            const formattedResult = formatServerDataForRender(data.result);
+            renderResult(formattedResult, 'teacher'); // Chế độ giáo viên
+        } else {
+            authMessage.textContent = `Không tìm thấy bài làm của học sinh ${name}.`;
+            authMessage.style.color = 'red';
+            resultWrapper.style.display = 'none';
+            initialMessage.style.display = 'block';
+        }
+
+    } catch (err) {
+        console.error('Lỗi khi tra cứu kết quả:', err);
+        authMessage.textContent = 'Lỗi kết nối hoặc lỗi server khi tra cứu.';
+        authMessage.style.color = 'red';
+    }
+}
+
+// Hàm chuẩn hóa dữ liệu từ Server (Giả định)
+function formatServerDataForRender(serverData) {
+    
+    // Lưu ý: Cần đảm bảo serverData.Submission_Details chứa các trường Q_Content, Correct_Keys, Your_Keys, Options_Map, ...
+    
+    const reviewData = serverData.Submission_Details.map(d => ({
+        index: d.Row_Index_in_Sheet,
+        question: d.Q_Content, 
+        isCorrect: d.Result === 'ĐÚNG',
+        user: parseAnswerKeys(d.Your_Keys),
+        correct: parseAnswerKeys(d.Correct_Keys),
+        options: d.Options_Map || {}, 
+        explanation: d.Explanation || '',
+    }));
+
+    return {
+        studentInfo: { name: serverData.Ten_hoc_sinh, class: serverData.Lop, stt: serverData.STT },
+        score: serverData.Score,
+        total: serverData.Total_Questions,
+        timeTaken: serverData.Time_Taken,
+        reviewData: reviewData 
+    };
+}
+
+
+// ====================================================================================================================
+// --- LOGIC HIỂN THỊ KẾT QUẢ ---
+// ====================================================================================================================
+
+function renderResult(finalResult, mode) {
+    const { studentInfo, score, total, timeTaken, reviewData } = finalResult;
+
+    // Hiển thị khung kết quả và ẩn thông báo ban đầu
+    resultWrapper.style.display = 'block';
+    initialMessage.style.display = 'none';
+    
+    // 1. Cấu hình chế độ hiển thị
+    if (mode === 'student') {
+        // Chế độ Học sinh: Ẩn điểm, ẩn chức năng tra cứu
+        scoreDisplay.style.display = 'none';
+        document.getElementById('lookup-area').style.display = 'none';
+        modeDisplay.textContent = '(Chế độ xem chi tiết bài làm đã nộp. Giáo viên sẽ thông báo điểm sau.)';
+    } else if (mode === 'teacher') {
+        // Chế độ Giáo viên: Hiển thị điểm, ẩn thông báo tra cứu
+        scoreDisplay.style.display = 'block';
+        modeDisplay.textContent = '(Chế độ Tra cứu Giáo viên)';
+        authMessage.textContent = '';
+    }
+
+    // 2. Hiển thị tóm tắt
+    document.getElementById('student-info-display').innerHTML = 
+        `Họ và tên: <strong>${studentInfo.name}</strong> - Lớp: <strong>${studentInfo.class}</strong> - STT: <strong>${studentInfo.stt}</strong>`;
+    
+    // Chỉ hiển thị điểm nếu là chế độ giáo viên
+    scoreDisplay.innerHTML = 
+        `ĐIỂM SỐ: <strong style="color: green; font-size: 1.2em;">${score}/${total}</strong>`;
+        
+    document.getElementById('time-display').innerHTML = 
+        `Thời gian làm bài: ${timeTaken}`;
+    
+    // 3. Hiển thị chi tiết từng câu hỏi
+    let html = '';
+    reviewData.forEach((item, index) => {
+        const questionNumber = item.index || (index + 1);
+        const resultText = item.isCorrect ? '<span class="correct-answer">ĐÚNG</span>' : '<span class="wrong-answer">SAI</span>';
+        const resultClass = item.isCorrect ? 'style="border-color: green;"' : 'style="border-color: red;"';
+        
+        // Hàm kiểm tra đáp án và trả về class CSS
+        const getOptionClass = (key) => {
+            const isUserSelected = item.user.includes(key);
+            const isCorrectKey = item.correct.includes(key);
+
+            if (isUserSelected && isCorrectKey) {
+                return 'selected-correct'; 
+            } else if (isUserSelected && !isCorrectKey) {
+                return 'selected-wrong'; 
+            } else if (!isUserSelected && isCorrectKey) {
+                return 'correct-key'; 
+            }
+            return '';
+        };
+
+        html += `
+            <div class="question-detail" ${resultClass}>
+                <h4>Câu ${questionNumber}: ${item.question} - ${resultText}</h4>
+                <div class="options-detail">
+        `;
+        
+        // Hiển thị nội dung đáp án A, B, C, D
+        ['A', 'B', 'C', 'D'].forEach(key => {
+            const content = item.options ? item.options[key] : '';
+            if (content && content.trim() !== '') {
+                const optionClass = getOptionClass(key);
+                html += `
+                    <div class="option-detail ${optionClass}">
+                        <strong>${key}:</strong> ${content}
                     </div>
-                    <div class="form-group col-4">
-                        <label for="lookup-stt">STT:</label>
-                        <input type="number" id="lookup-stt" placeholder="Nhập số thứ tự" required>
-                    </div>
-                    <div class="form-group col-4">
-                        <label for="lookup-name">Họ và Tên:</label>
-                        <input type="text" id="lookup-name" placeholder="Tên sẽ tự động điền" disabled required>
-                    </div>
-                </div>
-                <button id="lookup-btn">Tìm Kiếm Bài Làm</button>
-            </div>
-        </div>
+                `;
+            }
+        });
 
-        <div id="result-wrapper" style="display: none;">
-            <div class="summary-box">
-                <p id="student-info-display"></p>
-                <p id="score-display" style="display: none;"></p>
-                <p id="time-display"></p>
-                <p id="mode-display" style="color: #17a2b8; font-style: italic;"></p>
-            </div>
-            
-            <div id="quiz-details">
-                </div>
-        </div>
+        // Hiển thị chi tiết đáp án
+        html += `<p style="margin-top: 10px;">
+                    Đáp án bạn chọn: <strong>${item.user.length > 0 ? item.user.join(', ') : '(Chưa chọn)'}</strong>. 
+                    Đáp án đúng (Key): <strong>${item.correct.join(', ')}</strong>
+                </p>`;
+        
+        // Hiển thị giải thích
+        if (item.explanation) {
+             html += `<div class="explanation"><strong>Giải thích:</strong> ${item.explanation}</div>`;
+        }
+        
+        html += `</div></div>`;
+    });
 
-        <div id="initial-message" style="text-align: center; padding: 50px;">
-            <p>Sử dụng chức năng tra cứu để xem chi tiết bài làm.</p>
-        </div>
-
-
-        <div style="text-align: center; margin-top: 30px;">
-            <a href="quiz.html" style="padding: 10px 20px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px;">
-                Quay Lại Trang Làm Bài
-            </a>
-        </div>
-    </div>
-    <script src="details.js"></script>
-</body>
-</html>
+    detailsContainer.innerHTML = html;
+}
