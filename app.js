@@ -31,7 +31,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     // 2. Khôi phục dữ liệu nếu có từ localStorage (nhưng không hiển thị ngay phần làm bài)
     const savedInfo = localStorage.getItem('studentInfo');
     const savedQuestions = localStorage.getItem('quizQuestions');
-    const savedUserAnswers = localStorage.getItem('userAnswers'); // Thêm khôi phục userAnswers
+    const savedUserAnswers = localStorage.getItem('userAnswers');
 
     if (savedInfo && savedQuestions) {
         // Khôi phục đề cũ nếu đã từng nhấn nút "Làm bài"
@@ -151,7 +151,7 @@ function handleStudentDataChange() {
 
     // Reset tên
     studentNameInput.value = '';
-    studentNameInput.disabled = false; // Mở lại ô tên
+    studentNameInput.disabled = false;
 
     if (selectedClass && stt) {
         // Tìm học sinh dựa trên Lớp và STT
@@ -167,10 +167,12 @@ function handleStudentDataChange() {
             
             if (studentName) {
                 studentNameInput.value = String(studentName).trim();
-                studentNameInput.disabled = true; // Khóa ô tên sau khi tìm thấy
+                studentNameInput.disabled = true;
                 checkIfSubmitted(); // kiểm xem đã có nộp bài chưa, nếu nộp vô hiệu nút Làm bài
             } else {
                 studentNameInput.value = 'Không tìm thấy tên (Lỗi dữ liệu)';
+                startBtn.disabled = true;
+                startBtn.style.backgroundColor = '#ccc';
             }
         } else {
             studentNameInput.value = 'Không tìm thấy học sinh';
@@ -269,14 +271,15 @@ async function fetchQuestions() {
         if (json.data && json.data.length > 0) {
             questions = json.data;
             // Trộn thứ tự câu hỏi
-            shuffleArray(questions);
+            questions = shuffleArray(questions);
 
             // Khởi tạo userAnswers cho mỗi câu hỏi
             questions.forEach(q => {
                 // Đảm bảo ID là chuỗi
                 q.ID = String(q.ID); 
-                if (!userAnswers[q.ID]) {
-                    userAnswers[q.ID] = []; // Khởi tạo nếu chưa có
+                // CHỈ KHỞI TẠO NẾU CHƯA CÓ TRONG userAnswers (từ localStorage)
+                if (!userAnswers[q.ID]) {
+                    userAnswers[q.ID] = [];
                 }
             });
 
@@ -302,7 +305,7 @@ function renderQuiz() {
         const isMultiChoice = String(q.Loai_cau_hoi).toLowerCase() === 'multiple';
         const inputType = isMultiChoice ? 'checkbox' : 'radio';
         const inputName = `question_${q.ID}`;
-        const currentAnswers = userAnswers[q.ID] || [];
+        const currentAnswers = userAnswers[q.ID] || []; // Đảm bảo lấy được đáp án đã lưu
 
         html += `
             <div class="question-box" data-id="${q.ID}" data-type="${isMultiChoice ? 'multi' : 'single'}">
@@ -374,7 +377,11 @@ function handleOptionChange(event) {
     }
     
     // Lưu lại userAnswers vào localStorage
-    localStorage.setItem('userAnswers', JSON.stringify(userAnswers));
+    try {
+        localStorage.setItem('userAnswers', JSON.stringify(userAnswers));
+    } catch (e) {
+        console.error("Lỗi khi lưu userAnswers vào localStorage:", e);
+    }
 }
 
 // 4. Xử lý khi nộp bài và chấm điểm
@@ -383,30 +390,30 @@ submitBtn.addEventListener('click', () => {
         return;
     }
 
-    const timeTaken = stopTimer(); // Dừng và lấy thời gian
-    document.getElementById('timer-box').style.display = 'none'; // Ẩn bộ đếm
+    const timeTaken = stopTimer(); // Dừng và lấy thời gian
+    document.getElementById('timer-box').style.display = 'none'; // Ẩn bộ đếm
 
-    let score = 0;
-    let quizReview = []; // Lưu trữ kết quả chi tiết từng câu hỏi (chỉ key)
+    let score = 0;
+    let quizReview = [];
     let submissionDetail = []; // Lưu trữ chi tiết nội dung đáp án (để gửi lên server)
-    
-    questions.forEach((q, index) => {
-        const correctAnswers = parseCorrectAnswer(q.Dap_an_dung);      
-        const userSelectedAnswers = userAnswers[q.ID] || [];          
-        
-        // --- LOGIC CHẤM ĐIỂM ---
-        const sortedCorrect = [...correctAnswers].sort();
-        const sortedUser = [...userSelectedAnswers].sort();
+    
+    questions.forEach((q, index) => {
+        const correctAnswers = parseCorrectAnswer(q.Dap_an_dung);      
+        const userSelectedAnswers = userAnswers[q.ID] || [];          
+        
+        // --- LOGIC CHẤM ĐIỂM ---
+        const sortedCorrect = [...correctAnswers].sort();
+        const sortedUser = [...userSelectedAnswers].sort();
 
-        const sortedCorrectStr = JSON.stringify(sortedCorrect);
-        const sortedUserStr = JSON.stringify(sortedUser);
+        const sortedCorrectStr = JSON.stringify(sortedCorrect);
+        const sortedUserStr = JSON.stringify(sortedUser);
 
-        const isCorrect = sortedCorrectStr === sortedUserStr;
+        const isCorrect = sortedCorrectStr === sortedUserStr;
 
-        if (isCorrect) {
-            score++;
-        }
-        
+        if (isCorrect) {
+            score++;
+        }
+        
         // --- CHUẨN BỊ DỮ LIỆU ĐỂ GỬI LÊN SERVER (LƯU NỘI DUNG ĐÁP ÁN) ---
         const optionsMap = {
             'A': q.Dap_an_A,
@@ -426,96 +433,105 @@ submitBtn.addEventListener('click', () => {
             Correct_Keys: sortedCorrect.join(', '),
             Correct_Content: correctContent.join(' | '),
             Result: isCorrect ? 'ĐÚNG' : 'SAI',
-            Explanation: q.Giai_thich || '' // Giữ giải thích cho giáo viên
+            Explanation: q.Giai_thich || '' 
         });
 
-        // Lưu kết quả review chi tiết (chỉ để render giao diện, sau này sẽ bị ẩn)
-        quizReview.push({
-            index: index + 1,
-            question: q.Cau_hoi,
-            isCorrect: isCorrect,
-            user: userSelectedAnswers,
-        });
-    });
+        // Lưu kết quả review chi tiết cho details.html
+        quizReview.push({
+            index: index + 1,
+            question: q.Cau_hoi,
+            isCorrect: isCorrect,
+            user: userSelectedAnswers,
+            correct: sortedCorrect, // Thêm đáp án đúng (Key) 
+            options: optionsMap,    // Thêm nội dung đáp án (Value)
+            type: String(q.Loai_cau_hoi).toLowerCase()
+        });
+    });
 
-    // Chuyển sang trang kết quả
-    renderResults(score, quizReview, timeTaken);
+    // 1. Lưu kết quả vào sessionStorage để chuyển sang trang details.html
+    const finalResult = {
+        studentInfo: studentInfo,
+        score: score,
+        total: questions.length,
+        timeTaken: timeTaken,
+        reviewData: quizReview 
+    };
+    sessionStorage.setItem('finalQuizResult', JSON.stringify(finalResult));
 
-    // Lưu kết quả chi tiết lên server
-    const timestamp = new Date().toLocaleString('vi-VN');
+    // 2. Chuyển sang trang thông báo và xem chi tiết
+    renderSubmissionConfirmation(); 
 
-    fetch('/api/saveResult', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            studentInfo,
-            score,
-            total: questions.length,
-            timeTaken,
-            answers: submissionDetail // GỬI submissionDetail (Chứa nội dung đáp án)
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log('Kết quả đã được lưu:', data.message);
-    })
-    .catch(err => {
-        console.error('Lỗi khi gửi kết quả:', err);
-    });
+    // 3. Gửi kết quả chi tiết lên server
+    fetch('/api/saveResult', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            studentInfo,
+            score,
+            total: questions.length,
+            timeTaken,
+            answers: submissionDetail // GỬI submissionDetail (Chứa nội dung đáp án)
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log('Kết quả đã được lưu:', data.message);
+    })
+    .catch(err => {
+        console.error('Lỗi khi gửi kết quả:', err);
+        alert('LỖI NỘP BÀI. Vui lòng kiểm tra kết nối mạng và thử lại. Chi tiết lỗi đã được ghi vào console log.');
+    });
 
-    // Xóa dữ liệu bài làm sau khi nộp bài
-    localStorage.removeItem('studentInfo');
-    localStorage.removeItem('quizQuestions');
+    // Xóa dữ liệu bài làm sau khi nộp bài
+    localStorage.removeItem('studentInfo');
+    localStorage.removeItem('quizQuestions');
     localStorage.removeItem('userAnswers');
 });
 
-// 5. Hiển thị trang kết quả (Đã loại bỏ tất cả chi tiết đáp án và giải thích)
-function renderResults(score, reviewData, timeTaken) {
-    submitBtn.style.display = 'none';
-    quizContainer.innerHTML = '';
+// 5. Hiển thị trang xác nhận nộp bài (THAY THẾ renderResults cũ)
+function renderSubmissionConfirmation() {
+    submitBtn.style.display = 'none';
+    quizContainer.innerHTML = '';
+    document.getElementById('timer-box').style.display = 'none';
 
-    const total = reviewData.length;
-    const incorrect = total - score;
+    // Lấy dữ liệu tạm thời để hiển thị link
+    const finalResult = JSON.parse(sessionStorage.getItem('finalQuizResult'));
 
-    resultDiv.innerHTML = `
-        <div class="result-summary text-center" style="padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-            <h2>🎉 HOÀN THÀNH BÀI KIỂM TRA 🎉</h2>
-            <p style="font-size: 1.1em; margin: 10px 0;"><strong>Họ và tên:</strong> ${studentInfo.name} (Lớp: ${studentInfo.class} - STT: ${studentInfo.stt})</p>
-            <p style="font-size: 1.3em; color: green; font-weight: bold;">Điểm số: <strong>${score}/${total}</strong></p>
-            <p style="font-size: 1em; color: gray;">Thời gian làm bài: ${timeTaken}</p>
-        </div>
-        
-        <div style="margin-top: 20px; padding: 15px; background-color: #ffe0e0; border: 1px solid #ff0000; border-radius: 6px;">
-            <p style="color: #ff0000; font-weight: bold;">LƯU Ý: ĐÃ NỘP BÀI. Không hiển thị chi tiết đáp án đúng/sai trên màn hình này.</p>
-            <p style="color: #ff0000;">Thông tin chi tiết (đáp án đúng và sai) đã được gửi đến giáo viên.</p>
+    resultDiv.innerHTML = `
+        <div class="result-summary text-center" style="padding: 20px; border: 1px solid #28a745; border-radius: 8px; background-color: #e9f7ef;">
+            <h2>✅ HỆ THỐNG ĐÃ GHI NHẬN BÀI LÀM CỦA BẠN ✅</h2>
+            <p style="font-size: 1.1em; margin: 15px 0;">Xin chúc mừng, bạn đã hoàn thành bài kiểm tra.</p>
+            <p style="font-size: 1em; color: gray;">Thông tin của bạn: <strong>${finalResult.studentInfo.name}</strong> - Lớp: <strong>${finalResult.studentInfo.class}</strong></p>
+
+            <a href="details.html" style="
+                display: inline-block;
+                margin-top: 25px;
+                padding: 12px 25px;
+                background-color: #007bff;
+                color: white;
+                text-decoration: none;
+                border-radius: 6px;
+                font-weight: bold;
+            ">
+                Xem Bài Làm Chi Tiết và Điểm Số
+            </a>
         </div>
-    `;
-    
-    // Ẩn hoàn toàn phần review chi tiết và nút xem đáp án (vì không còn cần thiết)
-    const wrongContainer = document.getElementById('wrong-answers');
-    const showWrongBtn = document.getElementById('show-wrong-btn');
-    if (wrongContainer) wrongContainer.style.display = 'none';
-    if (showWrongBtn) showWrongBtn.style.display = 'none';
+        
+        <div style="margin-top: 20px; padding: 15px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 6px;">
+            <p style="color: #856404; font-weight: bold;">LƯU Ý QUAN TRỌNG:</p>
+            <p style="color: #856404;">Thông tin chi tiết và đáp án chỉ có thể được xem trên trang kết quả sau khi giáo viên cho phép.</p>
+        </div>
 
-    // Tạo nút Làm bài mới
-    const restartBtn = document.createElement('button');
-    restartBtn.textContent = 'Làm bài mới (Nếu giáo viên cho phép)';
-    restartBtn.style.padding = '12px 20px';
-    restartBtn.style.backgroundColor = '#17a2b8';
-    restartBtn.style.color = 'white';
-    restartBtn.style.border = 'none';
-    restartBtn.style.borderRadius = '6px';
-    restartBtn.style.cursor = 'pointer';
-    restartBtn.style.marginTop = '20px';
-
-    // Khi nhấn: xóa dữ liệu và reload trang
-    restartBtn.onclick = () => {
-        localStorage.removeItem('studentInfo');
-        localStorage.removeItem('quizQuestions');
-        localStorage.removeItem('userAnswers');
-        location.reload();
-    };
-
-    // Thêm nút vào phần kết quả
-    resultDiv.appendChild(restartBtn);
+        <button onclick="window.location.reload()" style="
+            padding: 10px 15px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-top: 15px;
+            cursor: pointer;
+        ">
+            Quay lại trang làm bài mới
+        </button>
+    `;
 }
