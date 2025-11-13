@@ -1,17 +1,3 @@
-<!-
-quiz-node/
-├── api/
-│   ├── questions.js      <-- API đọc câu hỏi (sheet default)
-│   ├── student.js        <-- API đọc danh sách lớp (sheet dsLop)
-│   └── saveResult.js     <-- API lưu kết quả (ghi vào Results.xlsx)
-├── data/
-│   └── questions.xlsx    <-- (Bạn cần thêm file này)
-├── index.html
-├── app.js
-├── package.json
-└── README.md
-->
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -91,7 +77,8 @@ quiz-node/
             margin-top: 15px;
         }
         .option-label {
-            display: block;
+            display: flex; /* SỬA LỖI: Dùng Flexbox để căn chỉnh Input và Text */
+            align-items: center; /* Căn giữa theo chiều dọc */
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 8px;
@@ -104,15 +91,24 @@ quiz-node/
         .option-label:hover {
             background-color: #e9ecef;
         }
+        /* Sử dụng :has() để tạo kiểu cho label khi input bên trong được chọn */
         .option-label:has(input:checked) {
             background-color: #d1e7dd; /* Xanh lá nhạt khi chọn */
             border-color: #badbcc;
         }
 
-        /* Ẩn input gốc và thay bằng styled input nếu muốn tùy chỉnh thêm */
+        /* ĐẢM BẢO INPUT LUÔN HIỂN THỊ và căn chỉnh */
         .options input {
-            margin-right: 10px;
-            /* Nếu muốn ẩn input gốc: appearance: none; */
+            /* Đảm bảo input gốc hiển thị */
+            appearance: auto !important; 
+            opacity: 1 !important;      
+            position: static !important;
+            width: initial !important;  
+            height: initial !important; 
+            
+            margin-right: 12px; /* Khoảng cách giữa nút và chữ */
+            flex-shrink: 0; 
+            cursor: pointer; /* Giữ con trỏ chuột pointer cho input */
         }
         .options span {
             font-size: 1.05em;
@@ -192,7 +188,6 @@ quiz-node/
         
       <h3>Thông tin học sinh</h3>
       
-      <!-- CẬP NHẬT: Thay input bằng select cho Lớp -->
       <label for="student-class">Lớp:</label>
       <select id="student-class" required>
         <option value="">-- Đang tải Lớp... --</option>
@@ -202,19 +197,16 @@ quiz-node/
       <input type="number" id="student-stt" required placeholder="Nhập số thứ tự">
 
       <label for="student-name">Họ và tên:</label>
-      <!-- CẬP NHẬT: Thêm disabled cho Tên Học sinh -->
       <input type="text" id="student-name" disabled required placeholder="Tên học sinh sẽ tự động điền">
 
       
       <button id="start-btn" style="padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">Làm bài</button>   
-
 
     </div>
     
     <div id="timer-box" style="display: none;">  ⏱️ Thời gian: <span id="timer"></span></div>
 
     <div id="quiz-container" style="display: none;">        
-        <!-- Nội dung sẽ được tải bởi app.js -->
         Đang tải câu hỏi...
     </div>
     
@@ -224,7 +216,6 @@ quiz-node/
     <button id="show-wrong-btn" style="display: none;">Danh sách câu sai</button>
     <div id="wrong-answers" style="margin-top: 20px;"></div>
 
-    <!-- Liên kết tới file JavaScript logic -->
     <script src="app.js"></script>
 </body>
 </html>
