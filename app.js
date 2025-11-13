@@ -319,7 +319,7 @@ function renderQuiz() {
                             data-q-id="${q.ID}"
                             onchange="handleOptionChange(event)"
                         >
-                        <span>${opt.key}. ${displayValue}</span>
+                        <span>${displayValue}</span>
                     </label>
                 `;
             }
