@@ -394,24 +394,36 @@ function handleOptionChange(event) {
     }
 }
 
-// 4. Xử lý khi nộp bài và chấm điểm
-submitBtn.addEventListener('click', () => {
+// 4. Xử lý khi nộp bài và chấm điểm (ĐÃ SỬA LỖI ASYNC/AWAIT)
+submitBtn.addEventListener('click', async (event) => {
+    // Ngăn chặn hành vi mặc định nếu nút nằm trong form
+    if (event) event.preventDefault();
+
     if (!confirm('Bạn có chắc chắn muốn nộp bài? Bài làm sẽ không thể thay đổi sau khi nộp.')) {
         return;
     }
 
-    const timeTaken = stopTimer(); // Dừng và lấy thời gian
-    document.getElementById('timer-box').style.display = 'none'; // Ẩn bộ đếm
+    // --- BẮT ĐẦU TRẠNG THÁI ĐANG GỬI ---
+    const originalBtnText = submitBtn.innerText;
+    submitBtn.innerText = 'Đang nộp bài... vui lòng chờ';
+    submitBtn.disabled = true; // Khóa nút để tránh bấm nhiều lần
+    
+    // Dừng đồng hồ tạm thời để lấy thời gian
+    const timeTaken = stopTimer(); 
+    
+    // Nếu nộp lỗi, chúng ta cần cho đồng hồ chạy lại hoặc giữ nguyên, 
+    // ở đây ta tạm ẩn box timer để tránh gây rối
+    document.getElementById('timer-box').style.display = 'none';
 
     let score = 0;
     let quizReview = [];
-    let submissionDetail = []; // Lưu trữ chi tiết nội dung đáp án (để gửi lên server)
+    let submissionDetail = []; 
     
+    // --- TÍNH ĐIỂM (Logic giữ nguyên) ---
     questions.forEach((q, index) => {
         const correctAnswers = parseCorrectAnswer(q.Dap_an_dung);      
         const userSelectedAnswers = userAnswers[q.ID] || [];           
         
-        // --- LOGIC CHẤM ĐIỂM ---
         const sortedCorrect = [...correctAnswers].sort();
         const sortedUser = [...userSelectedAnswers].sort();
 
@@ -424,7 +436,7 @@ submitBtn.addEventListener('click', () => {
             score++;
         }
         
-        // --- CHUẨN BỊ DỮ LIỆU ĐỂ GỬI LÊN SERVER (LƯU NỘI DUNG ĐÁP ÁN) ---
+        // Chuẩn bị dữ liệu chi tiết
         const optionsMap = {
             'A': q.Dap_an_A,
             'B': q.Dap_an_B,
@@ -446,19 +458,18 @@ submitBtn.addEventListener('click', () => {
             Explanation: q.Giai_thich || ''
         });
 
-        // Lưu kết quả review chi tiết cho details.html
         quizReview.push({
             index: index + 1,
             question: q.Cau_hoi,
             isCorrect: isCorrect,
             user: userSelectedAnswers,
-            correct: sortedCorrect, // Thêm đáp án đúng (Key)
-            options: optionsMap,    // Thêm nội dung đáp án (Value)
+            correct: sortedCorrect,
+            options: optionsMap,
             type: String(q.Loai_cau_hoi).toLowerCase()
         });
     });
 
-    // 1. Lưu kết quả vào sessionStorage để chuyển sang trang details.html
+    // Chuẩn bị object kết quả
     const finalResult = {
         studentInfo: studentInfo,
         score: score,
@@ -466,37 +477,56 @@ submitBtn.addEventListener('click', () => {
         timeTaken: timeTaken,
         reviewData: quizReview
     };
-    sessionStorage.setItem('finalQuizResult', JSON.stringify(finalResult));
 
-    // 2. Chuyển sang trang thông báo và xem chi tiết
-    renderSubmissionConfirmation();
+    // --- GỬI DỮ LIỆU LÊN SERVER (QUAN TRỌNG: Dùng Await) ---
+    try {
+        const response = await fetch('/api/saveResult', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                studentInfo,
+                score,
+                total: questions.length,
+                timeTaken,
+                answers: submissionDetail
+            })
+        });
 
-    // 3. Gửi kết quả chi tiết lên server
-    fetch('/api/saveResult', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            studentInfo,
-            score,
-            total: questions.length,
-            timeTaken,
-            answers: submissionDetail // GỬI submissionDetail (Chứa nội dung đáp án)
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
+        if (!response.ok) {
+            throw new Error(`Lỗi Server: ${response.status}`);
+        }
+
+        const data = await response.json();
         console.log('Kết quả đã được lưu:', data.message);
-    })
-    .catch(err => {
-        console.error('Lỗi khi gửi kết quả:', err);
-        alert('LỖI NỘP BÀI. Vui lòng kiểm tra kết nối mạng và thử lại. Chi tiết lỗi đã được ghi vào console log.');
-    });
 
-    // Xóa dữ liệu bài làm sau khi nộp bài
-    localStorage.removeItem('studentInfo');
-    localStorage.removeItem('quizQuestions');
-    localStorage.removeItem('userAnswers');
+        // --- CHỈ KHI GỬI THÀNH CÔNG MỚI THỰC HIỆN CÁC BƯỚC SAU ---
+
+        // 1. Lưu kết quả vào sessionStorage để xem chi tiết
+        sessionStorage.setItem('finalQuizResult', JSON.stringify(finalResult));
+
+        // 2. Xóa dữ liệu bài làm cũ
+        localStorage.removeItem('studentInfo');
+        localStorage.removeItem('quizQuestions');
+        localStorage.removeItem('userAnswers');
+
+        // 3. Chuyển giao diện sang màn hình xác nhận
+        renderSubmissionConfirmation();
+
+    } catch (err) {
+        console.error('Lỗi khi gửi kết quả:', err);
+        
+        // --- XỬ LÝ KHI GẶP LỖI ---
+        alert('⚠️ LỖI NỘP BÀI: ' + err.message + '\n\nBài làm của bạn VẪN CÒN. Vui lòng kiểm tra kết nối mạng và ấn NỘP BÀI lại.');
+        
+        // Khôi phục nút để học sinh ấn lại
+        submitBtn.disabled = false;
+        submitBtn.innerText = originalBtnText;
+        document.getElementById('timer-box').style.display = 'block'; // Hiện lại đồng hồ
+    }
 });
+
+
+
 
 // 5. Hiển thị trang xác nhận nộp bài (THAY THẾ renderResults cũ)
 function renderSubmissionConfirmation() {
