@@ -1,1 +1,101 @@
-
+{
+  "subjects": [
+    {
+      "id": "TIN",
+      "name": "Tin học"
+    }
+  ],
+  "lessons": [
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 1. Máy tính và cộng đồng",
+      "lesson": "Bài 1",
+      "lessonName": "Thông tin và dữ liệu"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 1. Máy tính và cộng đồng",
+      "lesson": "Bài 2",
+      "lessonName": "Xử lí thông tin"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 1. Máy tính và cộng đồng",
+      "lesson": "Bài 3",
+      "lessonName": "Thông tin trong máy tính"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 2. Mạng máy tính và Internet",
+      "lesson": "Bài 4",
+      "lessonName": "Mạng máy tính"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 2. Mạng máy tính và Internet",
+      "lesson": "Bài 5",
+      "lessonName": "Internet"
+    },
+    {
+      "grade": "7",
+      "book": "Cánh Diều",
+      "topic": "Chủ đề A. Máy tính và cộng đồng",
+      "lesson": "Bài 1",
+      "lessonName": "Thiết bị vào và thiết bị ra"
+    },
+    {
+      "grade": "7",
+      "book": "Cánh Diều",
+      "topic": "Chủ đề A. Máy tính và cộng đồng",
+      "lesson": "Bài 2",
+      "lessonName": "Hệ điều hành và phần mềm ứng dụng"
+    },
+    {
+      "grade": "7",
+      "book": "Cánh Diều",
+      "topic": "Chủ đề C. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
+      "lesson": "Bài 1",
+      "lessonName": "Mạng xã hội và một số kênh trao đổi thông tin trên Internet"
+    },
+    {
+      "grade": "8",
+      "book": "Cánh Diều",
+      "topic": "Chủ đề C. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
+      "lesson": "Bài 1",
+      "lessonName": "Dữ liệu số trong thời đại thông tin"
+    },
+    {
+      "grade": "8",
+      "book": "Cánh Diều",
+      "topic": "Chủ đề E. Ứng dụng tin học",
+      "lesson": "Bài 1",
+      "lessonName": "Xử lí đồ họa trong văn bản"
+    },
+    {
+      "grade": "8",
+      "book": "Cánh Diều",
+      "topic": "Chủ đề E. Ứng dụng tin học",
+      "lesson": "Bài 5",
+      "lessonName": "Các kiểu địa chỉ trong bảng tính"
+    },
+    {
+      "grade": "9",
+      "book": "Cánh Diều",
+      "topic": "Chủ đề E. Ứng dụng tin học",
+      "lesson": "Bài 1",
+      "lessonName": "Xác thực dữ liệu nhập vào bảng tính"
+    },
+    {
+      "grade": "9",
+      "book": "Cánh Diều",
+      "topic": "Chủ đề F. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 1",
+      "lessonName": "Phần mềm mô phỏng và ứng dụng"
+    }
+  ]
+}

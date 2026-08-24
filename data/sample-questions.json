@@ -1,0 +1,81 @@
+[
+  {
+    "id": "T6-KNTT-A-B01-NB-0001",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề A",
+    "lesson": "Bài 1",
+    "lessonName": "Thông tin và dữ liệu",
+    "level": "NB",
+    "content": "Phương án nào sau đây là một ví dụ về thông tin?",
+    "options": [
+      "Nhiệt độ ngoài trời là 30°C",
+      "Một chiếc bàn phím",
+      "Một ổ cứng",
+      "Một dây cáp mạng"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Thông tin giúp con người hiểu biết về sự vật hoặc hiện tượng; nhiệt độ 30°C là thông tin về thời tiết.",
+    "tags": [
+      "thông tin",
+      "dữ liệu"
+    ],
+    "status": "approved",
+    "source": "manual",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T7-CD-A-B01-TH-0001",
+    "grade": "7",
+    "book": "Cánh Diều",
+    "topic": "Chủ đề A",
+    "lesson": "Bài 1",
+    "lessonName": "Thiết bị vào và thiết bị ra",
+    "level": "TH",
+    "content": "Khi học sinh dùng micro để ghi âm vào máy tính, micro đóng vai trò gì?",
+    "options": [
+      "Thiết bị vào",
+      "Thiết bị ra",
+      "Thiết bị lưu trữ",
+      "Thiết bị xử lí"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Micro thu âm thanh từ môi trường và đưa dữ liệu âm thanh vào máy tính nên là thiết bị vào.",
+    "tags": [
+      "thiết bị vào",
+      "micro"
+    ],
+    "status": "approved",
+    "source": "manual",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T8-CD-C-B02-VD-0001",
+    "grade": "8",
+    "book": "Cánh Diều",
+    "topic": "Chủ đề C",
+    "lesson": "Bài 2",
+    "lessonName": "Sử dụng bảng tính giải quyết bài toán thực tế",
+    "level": "VD",
+    "content": "Trong bảng tính, ô B2 chứa đơn giá và ô C2 chứa số lượng. Công thức nào tính đúng thành tiền và có thể sao chép xuống các dòng dưới?",
+    "options": [
+      "=B2*C2",
+      "=B$2*C$2",
+      "=$B$2*$C$2",
+      "=B2+C2"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Công thức =B2*C2 sử dụng địa chỉ tương đối, phù hợp để sao chép xuống các dòng tiếp theo.",
+    "tags": [
+      "bảng tính",
+      "công thức",
+      "địa chỉ tương đối"
+    ],
+    "status": "draft",
+    "source": "manual",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  }
+]
