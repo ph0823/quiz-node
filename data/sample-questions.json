@@ -1,80 +1,782 @@
 [
   {
-    "id": "T6-KNTT-A-B01-NB-0001",
+    "id": "T6-KNTT-C1-B01-NB-0001",
     "grade": "6",
     "book": "Kết nối tri thức",
-    "topic": "Chủ đề A",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
     "lesson": "Bài 1",
     "lessonName": "Thông tin và dữ liệu",
     "level": "NB",
-    "content": "Phương án nào sau đây là một ví dụ về thông tin?",
+    "content": "Thông tin là gì?",
     "options": [
-      "Nhiệt độ ngoài trời là 30°C",
-      "Một chiếc bàn phím",
-      "Một ổ cứng",
-      "Một dây cáp mạng"
+      "Những gì đem lại hiểu biết cho con người",
+      "Mọi đồ vật có trong phòng học",
+      "Chỉ các con số được ghi lại",
+      "Chỉ âm thanh phát ra từ loa"
     ],
     "correctAnswer": 0,
-    "explanation": "Thông tin giúp con người hiểu biết về sự vật hoặc hiện tượng; nhiệt độ 30°C là thông tin về thời tiết.",
+    "explanation": "Thông tin là những gì đem lại hiểu biết cho con người về sự vật, hiện tượng và thế giới xung quanh.",
     "tags": [
       "thông tin",
+      "khái niệm"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B01-NB-0002",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 1",
+    "lessonName": "Thông tin và dữ liệu",
+    "level": "NB",
+    "content": "Dữ liệu được hiểu là gì?",
+    "options": [
+      "Một thiết bị dùng để nhập văn bản",
+      "Mọi suy nghĩ chưa được thể hiện",
+      "Chỉ những hình ảnh trên Internet",
+      "Thông tin được biểu diễn để lưu trữ và xử lí"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Dữ liệu là thông tin được biểu diễn dưới dạng phù hợp để con người hoặc máy tính lưu trữ và xử lí.",
+    "tags": [
+      "dữ liệu",
+      "khái niệm"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B01-NB-0003",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 1",
+    "lessonName": "Thông tin và dữ liệu",
+    "level": "NB",
+    "content": "Vật mang tin là gì?",
+    "options": [
+      "Phần mềm dùng để vẽ hình",
+      "Một loại mạng máy tính",
+      "Phương tiện dùng để lưu trữ và truyền thông tin",
+      "Thiết bị chỉ dùng để tính toán"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Vật mang tin là phương tiện chứa, lưu trữ hoặc truyền tải thông tin, chẳng hạn sách, biển báo hay thẻ nhớ.",
+    "tags": [
+      "vật mang tin"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B01-NB-0004",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 1",
+    "lessonName": "Thông tin và dữ liệu",
+    "level": "NB",
+    "content": "Đâu là một vật mang tin?",
+    "options": [
+      "Quyết định mang áo mưa",
+      "Tấm biển chỉ đường",
+      "Ý định đi học sớm",
+      "Sự hiểu biết về thời tiết"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Tấm biển chỉ đường chứa và truyền thông tin bằng chữ, kí hiệu nên là một vật mang tin.",
+    "tags": [
+      "vật mang tin",
+      "biển báo"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B01-TH-0001",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 1",
+    "lessonName": "Thông tin và dữ liệu",
+    "level": "TH",
+    "content": "Trong câu “Đèn tín hiệu đang màu đỏ”, đâu là dữ liệu trực tiếp giúp người đi đường nhận được thông tin?",
+    "options": [
+      "Ánh sáng màu đỏ của đèn",
+      "Việc người đi đường dừng lại",
+      "Quy định phải chấp hành",
+      "Sự an toàn của giao thông"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Ánh sáng màu đỏ là dữ liệu quan sát được; từ đó người đi đường nhận thông tin cần dừng lại.",
+    "tags": [
+      "thông tin",
+      "dữ liệu",
+      "đèn giao thông"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B01-TH-0002",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 1",
+    "lessonName": "Thông tin và dữ liệu",
+    "level": "TH",
+    "content": "Một học sinh nghe tiếng trống trường và biết đã đến giờ vào lớp. Tiếng trống đóng vai trò gì?",
+    "options": [
+      "Thông tin không cần vật mang tin",
+      "Thiết bị xử lí của máy tính",
+      "Kết quả sau khi học sinh vào lớp",
+      "Dữ liệu giúp học sinh nhận thông tin"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Tiếng trống là dữ liệu âm thanh; học sinh tiếp nhận dữ liệu đó để biết thông tin đã đến giờ vào lớp.",
+    "tags": [
+      "âm thanh",
       "dữ liệu"
     ],
     "status": "approved",
-    "source": "manual",
+    "source": "sample",
     "createdAt": "2026-08-24T00:00:00.000Z",
     "updatedAt": "2026-08-24T00:00:00.000Z"
   },
   {
-    "id": "T7-CD-A-B01-TH-0001",
-    "grade": "7",
-    "book": "Cánh Diều",
-    "topic": "Chủ đề A",
+    "id": "T6-KNTT-C1-B01-TH-0003",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
     "lesson": "Bài 1",
-    "lessonName": "Thiết bị vào và thiết bị ra",
+    "lessonName": "Thông tin và dữ liệu",
     "level": "TH",
-    "content": "Khi học sinh dùng micro để ghi âm vào máy tính, micro đóng vai trò gì?",
+    "content": "Tại sao cùng một dữ liệu có thể mang lại thông tin khác nhau cho những người khác nhau?",
     "options": [
-      "Thiết bị vào",
-      "Thiết bị ra",
-      "Thiết bị lưu trữ",
-      "Thiết bị xử lí"
+      "Vì vật mang tin quyết định mọi kết luận",
+      "Vì thông tin chỉ phụ thuộc vào thiết bị",
+      "Vì mỗi người có hiểu biết và mục đích khác nhau",
+      "Vì dữ liệu luôn tự thay đổi nội dung"
     ],
-    "correctAnswer": 0,
-    "explanation": "Micro thu âm thanh từ môi trường và đưa dữ liệu âm thanh vào máy tính nên là thiết bị vào.",
+    "correctAnswer": 2,
+    "explanation": "Kiến thức, hoàn cảnh và mục đích của mỗi người ảnh hưởng đến cách họ hiểu và sử dụng cùng một dữ liệu.",
     "tags": [
-      "thiết bị vào",
-      "micro"
+      "vai trò thông tin",
+      "ngữ cảnh"
     ],
     "status": "approved",
-    "source": "manual",
+    "source": "sample",
     "createdAt": "2026-08-24T00:00:00.000Z",
     "updatedAt": "2026-08-24T00:00:00.000Z"
   },
   {
-    "id": "T8-CD-C-B02-VD-0001",
-    "grade": "8",
-    "book": "Cánh Diều",
-    "topic": "Chủ đề C",
-    "lesson": "Bài 2",
-    "lessonName": "Sử dụng bảng tính giải quyết bài toán thực tế",
-    "level": "VD",
-    "content": "Trong bảng tính, ô B2 chứa đơn giá và ô C2 chứa số lượng. Công thức nào tính đúng thành tiền và có thể sao chép xuống các dòng dưới?",
+    "id": "T6-KNTT-C1-B01-TH-0004",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 1",
+    "lessonName": "Thông tin và dữ liệu",
+    "level": "TH",
+    "content": "Phát biểu nào mô tả đúng mối quan hệ giữa thông tin và dữ liệu?",
     "options": [
-      "=B2*C2",
-      "=B$2*C$2",
-      "=$B$2*$C$2",
-      "=B2+C2"
+      "Thông tin và dữ liệu hoàn toàn giống nhau",
+      "Dữ liệu là cách biểu diễn thông tin",
+      "Thông tin luôn chỉ là các con số",
+      "Dữ liệu không thể lưu trên vật mang tin"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Thông tin là nội dung hiểu biết, còn dữ liệu là cách biểu diễn thông tin để lưu trữ, trao đổi hoặc xử lí.",
+    "tags": [
+      "thông tin",
+      "dữ liệu",
+      "mối quan hệ"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B01-VD-0001",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 1",
+    "lessonName": "Thông tin và dữ liệu",
+    "level": "VD",
+    "content": "Trước khi đi dã ngoại, Minh xem dự báo “khả năng mưa 80%”. Cách sử dụng thông tin nào hợp lí nhất?",
+    "options": [
+      "Mang theo áo mưa hoặc ô",
+      "Bỏ qua dự báo vì chưa chắc mưa",
+      "Chỉ mang thêm sách giáo khoa",
+      "Tắt điện thoại để khỏi xem lại"
     ],
     "correctAnswer": 0,
-    "explanation": "Công thức =B2*C2 sử dụng địa chỉ tương đối, phù hợp để sao chép xuống các dòng tiếp theo.",
+    "explanation": "Dự báo có khả năng mưa cao là thông tin hữu ích; mang áo mưa hoặc ô là quyết định phù hợp dựa trên thông tin đó.",
     "tags": [
-      "bảng tính",
-      "công thức",
-      "địa chỉ tương đối"
+      "vận dụng thông tin",
+      "thời tiết"
     ],
-    "status": "draft",
-    "source": "manual",
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B01-VD-0002",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 1",
+    "lessonName": "Thông tin và dữ liệu",
+    "level": "VD",
+    "content": "Lan nhận được tin nhắn “Ngày mai lớp nghỉ học” từ một tài khoản lạ. Lan nên làm gì trước khi sử dụng thông tin này?",
+    "options": [
+      "Chuyển ngay cho tất cả bạn trong lớp",
+      "Tin ngay vì tin nhắn có ghi tên trường",
+      "Xóa mọi tin nhắn trong điện thoại",
+      "Kiểm tra lại với giáo viên hoặc kênh chính thức"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Thông tin từ nguồn lạ cần được kiểm chứng bằng nguồn đáng tin cậy trước khi đưa ra quyết định hoặc chia sẻ.",
+    "tags": [
+      "kiểm chứng thông tin",
+      "nguồn tin"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B02-NB-0001",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 2",
+    "lessonName": "Xử lí thông tin",
+    "level": "NB",
+    "content": "Hoạt động xử lí thông tin của con người thường gồm những bước cơ bản nào?",
+    "options": [
+      "Đọc, viết, vẽ và nghe nhạc",
+      "Mở, đóng, sao chép và xóa tệp",
+      "Thu nhận, lưu trữ, xử lí và truyền thông tin",
+      "Nhập, in, tắt và khởi động máy"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Các hoạt động cơ bản với thông tin gồm thu nhận, lưu trữ, xử lí và truyền hoặc trao đổi thông tin.",
+    "tags": [
+      "xử lí thông tin",
+      "các bước"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B02-NB-0002",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 2",
+    "lessonName": "Xử lí thông tin",
+    "level": "NB",
+    "content": "Giác quan nào giúp con người thu nhận thông tin bằng hình ảnh?",
+    "options": [
+      "Vị giác",
+      "Thị giác",
+      "Thính giác",
+      "Khứu giác"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Thị giác thông qua mắt giúp con người thu nhận màu sắc, hình dạng, chữ viết và các thông tin bằng hình ảnh.",
+    "tags": [
+      "thu nhận thông tin",
+      "giác quan"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B02-NB-0003",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 2",
+    "lessonName": "Xử lí thông tin",
+    "level": "NB",
+    "content": "Bộ phận nào của con người giữ vai trò chính trong việc xử lí thông tin?",
+    "options": [
+      "Bộ não",
+      "Bàn tay",
+      "Đôi chân",
+      "Mái tóc"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Bộ não phân tích dữ liệu thu nhận được, ghi nhớ và giúp con người đưa ra quyết định.",
+    "tags": [
+      "bộ não",
+      "xử lí thông tin"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B02-NB-0004",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 2",
+    "lessonName": "Xử lí thông tin",
+    "level": "NB",
+    "content": "Hoạt động nào là lưu trữ thông tin?",
+    "options": [
+      "Nghe giáo viên giảng",
+      "Tính tổng hai số",
+      "Nói kết quả cho bạn",
+      "Ghi bài vào vở"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Ghi bài vào vở giúp lưu lại nội dung để có thể xem và sử dụng vào thời điểm khác.",
+    "tags": [
+      "lưu trữ thông tin"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B02-TH-0001",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 2",
+    "lessonName": "Xử lí thông tin",
+    "level": "TH",
+    "content": "Khi học sinh nhìn đồng hồ, biết còn 5 phút và quyết định làm câu dễ trước, hoạt động nào là xử lí thông tin?",
+    "options": [
+      "Ghi đáp án vào giấy kiểm tra",
+      "Nộp bài cho giáo viên",
+      "Đánh giá thời gian rồi chọn cách làm bài",
+      "Nhìn thấy các kim trên mặt đồng hồ"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Việc đánh giá thời gian còn lại và lựa chọn chiến lược làm bài là quá trình phân tích để đưa ra quyết định.",
+    "tags": [
+      "xử lí thông tin",
+      "quyết định"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B02-TH-0002",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 2",
+    "lessonName": "Xử lí thông tin",
+    "level": "TH",
+    "content": "Trong hoạt động gọi điện thoại, hành động nào thể hiện truyền thông tin?",
+    "options": [
+      "Quan sát biểu tượng pin trên máy",
+      "Nói nội dung để người ở xa nghe",
+      "Nhớ số điện thoại của người thân",
+      "Suy nghĩ trước khi trả lời"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Lời nói được thiết bị chuyển đến người ở xa là hoạt động truyền thông tin giữa hai người.",
+    "tags": [
+      "truyền thông tin",
+      "điện thoại"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B02-TH-0003",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 2",
+    "lessonName": "Xử lí thông tin",
+    "level": "TH",
+    "content": "Máy tính hỗ trợ con người xử lí thông tin hiệu quả chủ yếu vì lí do nào?",
+    "options": [
+      "Có thể xử lí nhanh, chính xác và lưu nhiều dữ liệu",
+      "Có thể tự hiểu mọi vấn đề như con người",
+      "Luôn đưa ra quyết định đúng trong mọi tình huống",
+      "Không cần con người cung cấp dữ liệu và lệnh"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Máy tính có ưu thế về tốc độ, độ chính xác và khả năng lưu trữ, nhưng vẫn cần dữ liệu và chương trình do con người cung cấp.",
+    "tags": [
+      "vai trò máy tính",
+      "xử lí"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B02-TH-0004",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 2",
+    "lessonName": "Xử lí thông tin",
+    "level": "TH",
+    "content": "Một bạn chụp ảnh thời khóa biểu rồi gửi vào nhóm lớp. Hai hoạt động thông tin chính được thực hiện là gì?",
+    "options": [
+      "Thu nhận và tính toán thông tin",
+      "Xử lí và xóa thông tin",
+      "Mã hóa và sửa chữa thiết bị",
+      "Lưu trữ và truyền thông tin"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Chụp ảnh tạo bản lưu của thời khóa biểu, còn gửi vào nhóm là truyền thông tin đến các bạn.",
+    "tags": [
+      "lưu trữ",
+      "truyền thông tin"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B02-VD-0001",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 2",
+    "lessonName": "Xử lí thông tin",
+    "level": "VD",
+    "content": "Nhóm học sinh cần chọn ngày tổ chức hoạt động ngoài trời. Quy trình nào hợp lí nhất?",
+    "options": [
+      "Chỉ hỏi một bạn và không ghi lại kết quả",
+      "Đợi đến ngày tổ chức mới quyết định địa điểm",
+      "Thu thập dự báo, so sánh các ngày rồi thông báo lựa chọn",
+      "Chọn ngẫu nhiên một ngày rồi mới xem thời tiết"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Quy trình hợp lí phải thu nhận dữ liệu, xử lí bằng cách so sánh, đưa ra quyết định rồi truyền thông tin cho mọi người.",
+    "tags": [
+      "quy trình xử lí",
+      "thời tiết"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B02-VD-0002",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 2",
+    "lessonName": "Xử lí thông tin",
+    "level": "VD",
+    "content": "Một cửa hàng ghi số lượng bán được mỗi ngày. Để biết mặt hàng bán chạy nhất, cần thực hiện thao tác nào?",
+    "options": [
+      "Gửi toàn bộ dữ liệu cho khách hàng",
+      "Tổng hợp và so sánh số lượng của các mặt hàng",
+      "Chỉ lưu dữ liệu mà không xem lại",
+      "Xóa các ngày có số lượng bán thấp"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Muốn rút ra kết luận, cần xử lí dữ liệu bằng cách tổng hợp và so sánh số lượng bán của từng mặt hàng.",
+    "tags": [
+      "xử lí dữ liệu",
+      "so sánh"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B03-NB-0001",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 3",
+    "lessonName": "Thông tin trong máy tính",
+    "level": "NB",
+    "content": "Máy tính biểu diễn thông tin bằng dãy gồm hai kí hiệu nào?",
+    "options": [
+      "0 và 1",
+      "1 và 2",
+      "A và B",
+      "Đúng và sai"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Bên trong máy tính, mọi loại thông tin đều được mã hóa thành các dãy bit gồm hai kí hiệu 0 và 1.",
+    "tags": [
+      "bit",
+      "biểu diễn thông tin"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B03-NB-0002",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 3",
+    "lessonName": "Thông tin trong máy tính",
+    "level": "NB",
+    "content": "Bit là gì?",
+    "options": [
+      "Đơn vị đo chiều dài của màn hình",
+      "Một loại thiết bị lưu trữ",
+      "Tên của một phần mềm máy tính",
+      "Đơn vị nhỏ nhất dùng để biểu diễn thông tin"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Bit là đơn vị nhỏ nhất của thông tin số và có thể nhận một trong hai giá trị 0 hoặc 1.",
+    "tags": [
+      "bit",
+      "đơn vị thông tin"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B03-NB-0003",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 3",
+    "lessonName": "Thông tin trong máy tính",
+    "level": "NB",
+    "content": "Một byte gồm bao nhiêu bit?",
+    "options": [
+      "10 bit",
+      "1024 bit",
+      "8 bit",
+      "2 bit"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Theo quy ước thông dụng, một byte được tạo bởi 8 bit.",
+    "tags": [
+      "byte",
+      "bit"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B03-NB-0004",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 3",
+    "lessonName": "Thông tin trong máy tính",
+    "level": "NB",
+    "content": "Đơn vị nào lớn hơn megabyte (MB)?",
+    "options": [
+      "Bit",
+      "Gigabyte (GB)",
+      "Kilobyte (KB)",
+      "Byte (B)"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Trong các đơn vị đã cho, gigabyte lớn hơn megabyte; kilobyte, byte và bit đều nhỏ hơn.",
+    "tags": [
+      "đơn vị lưu trữ",
+      "gigabyte"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B03-TH-0001",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 3",
+    "lessonName": "Thông tin trong máy tính",
+    "level": "TH",
+    "content": "Tại sao văn bản, hình ảnh và âm thanh đều có thể lưu trong máy tính?",
+    "options": [
+      "Vì chúng đều được mã hóa thành dãy bit",
+      "Vì máy tính giữ nguyên dạng vật lí ban đầu",
+      "Vì mỗi loại chỉ cần một bit duy nhất",
+      "Vì dữ liệu không chiếm dung lượng lưu trữ"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Máy tính chuyển các dạng thông tin khác nhau thành dữ liệu số dưới dạng dãy bit để lưu trữ và xử lí.",
+    "tags": [
+      "mã hóa",
+      "dữ liệu số"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B03-TH-0002",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 3",
+    "lessonName": "Thông tin trong máy tính",
+    "level": "TH",
+    "content": "Hai tệp ảnh có cùng kích thước hiển thị nhưng dung lượng khác nhau. Giải thích nào hợp lí?",
+    "options": [
+      "Mọi tệp ảnh cùng kích thước luôn bằng dung lượng",
+      "Tên tệp dài hơn luôn làm dung lượng tăng mạnh",
+      "Màu của biểu tượng tệp quyết định dung lượng",
+      "Cách mã hóa và mức độ chi tiết có thể khác nhau"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Dung lượng còn phụ thuộc độ phân giải, số màu, định dạng và cách nén chứ không chỉ phụ thuộc kích thước hiển thị.",
+    "tags": [
+      "dung lượng",
+      "ảnh số"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B03-TH-0003",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 3",
+    "lessonName": "Thông tin trong máy tính",
+    "level": "TH",
+    "content": "Phát biểu nào đúng về quan hệ giữa các đơn vị lưu trữ?",
+    "options": [
+      "1 MB nhỏ hơn 1 KB",
+      "1 GB bằng 8 byte",
+      "1 KB thường được quy ước bằng 1024 byte",
+      "1 byte bằng 1024 bit"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Trong cách quy đổi thường dùng ở chương trình phổ thông, 1 KB bằng 1024 byte.",
+    "tags": [
+      "kilobyte",
+      "quy đổi"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B03-TH-0004",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 3",
+    "lessonName": "Thông tin trong máy tính",
+    "level": "TH",
+    "content": "Khi dung lượng tệp tăng, điều gì thường xảy ra?",
+    "options": [
+      "Máy tính không cần mã hóa tệp",
+      "Cần nhiều không gian lưu trữ hơn",
+      "Tệp luôn mở nhanh hơn",
+      "Tệp tự động chính xác hơn"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Tệp có dung lượng lớn chứa nhiều dữ liệu hơn hoặc ít được nén hơn nên cần nhiều không gian lưu trữ.",
+    "tags": [
+      "dung lượng tệp",
+      "lưu trữ"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B03-VD-0001",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 3",
+    "lessonName": "Thông tin trong máy tính",
+    "level": "VD",
+    "content": "Một thẻ nhớ còn trống 2 GB. Mỗi video có dung lượng khoảng 500 MB. Bỏ qua chênh lệch quy đổi, thẻ có thể lưu gần đúng bao nhiêu video?",
+    "options": [
+      "4 video",
+      "2 video",
+      "8 video",
+      "20 video"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Có thể ước lượng 2 GB khoảng 2000 MB; lấy 2000 chia 500 được khoảng 4 video.",
+    "tags": [
+      "dung lượng",
+      "ước lượng",
+      "video"
+    ],
+    "status": "approved",
+    "source": "sample",
+    "createdAt": "2026-08-24T00:00:00.000Z",
+    "updatedAt": "2026-08-24T00:00:00.000Z"
+  },
+  {
+    "id": "T6-KNTT-C1-B03-VD-0002",
+    "grade": "6",
+    "book": "Kết nối tri thức",
+    "topic": "Chủ đề 1. Máy tính và cộng đồng",
+    "lesson": "Bài 3",
+    "lessonName": "Thông tin trong máy tính",
+    "level": "VD",
+    "content": "Mai cần gửi một thư mục ảnh qua mạng nhưng dung lượng quá lớn. Cách xử lí phù hợp nhất là gì?",
+    "options": [
+      "Đổi tên thư mục thành tên ngắn hơn",
+      "Tạo thêm nhiều bản sao của các ảnh",
+      "Chuyển tất cả ảnh sang màn hình nền",
+      "Nén hoặc giảm kích thước ảnh trước khi gửi"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Nén dữ liệu hoặc giảm độ phân giải ảnh giúp giảm dung lượng, thuận tiện hơn khi truyền qua mạng.",
+    "tags": [
+      "nén dữ liệu",
+      "dung lượng ảnh"
+    ],
+    "status": "approved",
+    "source": "sample",
     "createdAt": "2026-08-24T00:00:00.000Z",
     "updatedAt": "2026-08-24T00:00:00.000Z"
   }
