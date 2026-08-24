@@ -1,6 +1,6 @@
-const STORAGE_KEY = "thcs-question-bank-v4";
+const STORAGE_KEY = "thcs-question-bank-v4-2";
 const SYNC_CONFIG_KEY = "thcs-question-bank-sync-v1";
-const LEGACY_KEYS = ["thcs-question-bank-v3", "thcs-question-bank-v2-1", "thcs-question-bank-v2", "thcs-question-bank-v1"];
+const LEGACY_KEYS = ["thcs-question-bank-v4", "thcs-question-bank-v3", "thcs-question-bank-v2-1", "thcs-question-bank-v2", "thcs-question-bank-v1"];
 const SAMPLE_URL = "data/sample-questions.json";
 const CATALOG_URL = "data/lesson-catalog.json";
 const DEFAULT_BOOK = "Kết nối tri thức";
@@ -114,10 +114,56 @@ function on(id, eventName, handler) {
 }
 
 async function loadCatalog() {
-  const response = await fetch(CATALOG_URL);
-  if (!response.ok) throw new Error("Không thể tải danh mục bài học.");
-  state.catalog = await response.json();
-  state.catalog.lessons = (state.catalog.lessons || []).filter((item) => item.book === DEFAULT_BOOK);
+  try {
+    const response = await fetch(`${CATALOG_URL}?v=4.2`, { cache: "no-store" });
+    if (!response.ok) throw new Error("Không thể tải danh mục bài học.");
+    const raw = await response.json();
+    const lessons = Array.isArray(raw) ? raw : (raw.lessons || []);
+    state.catalog = {
+      ...(Array.isArray(raw) ? {} : raw),
+      lessons: lessons
+        .map(normalizeLessonItem)
+        .filter((item) => item.book === DEFAULT_BOOK),
+    };
+  } catch (error) {
+    console.warn("Không tải được danh mục bài học, sẽ tạo danh mục từ ngân hàng câu hỏi.", error);
+    state.catalog = { lessons: [] };
+  }
+}
+
+
+function normalizeLessonItem(item) {
+  return {
+    grade: String(item?.grade ?? "").trim(),
+    book: String(item?.book ?? DEFAULT_BOOK).trim() || DEFAULT_BOOK,
+    topic: String(item?.topic ?? "").trim(),
+    lesson: String(item?.lesson ?? "").trim(),
+    lessonName: String(item?.lessonName ?? "").trim(),
+  };
+}
+
+function getEffectiveLessons() {
+  const combined = [
+    ...(state.catalog.lessons || []).map(normalizeLessonItem),
+    ...state.questions.map((q) => normalizeLessonItem({
+      grade: q.grade,
+      book: q.book || DEFAULT_BOOK,
+      topic: q.topic,
+      lesson: q.lesson,
+      lessonName: q.lessonName,
+    })),
+  ].filter((item) => item.grade && item.topic && item.lesson);
+
+  const unique = new Map();
+  combined.forEach((item) => {
+    const key = [item.grade, item.book, item.topic, item.lesson].join("||");
+    if (!unique.has(key) || (!unique.get(key).lessonName && item.lessonName)) unique.set(key, item);
+  });
+  return [...unique.values()].sort((a, b) =>
+    a.grade.localeCompare(b.grade, "vi", { numeric: true }) ||
+    a.topic.localeCompare(b.topic, "vi", { numeric: true }) ||
+    a.lesson.localeCompare(b.lesson, "vi", { numeric: true })
+  );
 }
 
 async function loadQuestions() {
@@ -134,7 +180,7 @@ async function loadQuestions() {
 }
 
 async function loadSampleData() {
-  const response = await fetch(SAMPLE_URL);
+  const response = await fetch(`${SAMPLE_URL}?v=4.2`, { cache: "no-store" });
   if (!response.ok) throw new Error("Không thể tải dữ liệu mẫu.");
   state.questions = await response.json();
   normalizeAllQuestions(false);
@@ -278,7 +324,7 @@ function closeQuestionDialog() {
 
 function refreshTopicOptions(selectedTopic = "") {
   const grade = valueOf("grade");
-  const topics = [...new Set(state.catalog.lessons
+  const topics = [...new Set(getEffectiveLessons()
     .filter((item) => item.grade === grade)
     .map((item) => item.topic))];
   const topicSelect = document.querySelector("#topic");
@@ -292,7 +338,7 @@ function refreshTopicOptions(selectedTopic = "") {
 function refreshLessonOptions(selectedLesson = "") {
   const grade = valueOf("grade");
   const topic = valueOf("topic");
-  const lessons = state.catalog.lessons.filter((item) => item.grade === grade && item.topic === topic);
+  const lessons = getEffectiveLessons().filter((item) => item.grade === grade && item.topic === topic);
   const lessonSelect = document.querySelector("#lesson");
   lessonSelect.innerHTML = `<option value="">Chọn bài học</option>` + lessons
     .map((item) => `<option value="${escapeHtml(item.lesson)}">${escapeHtml(item.lesson)} – ${escapeHtml(item.lessonName)}</option>`).join("");
@@ -303,13 +349,13 @@ function refreshLessonOptions(selectedLesson = "") {
 }
 
 function syncLessonName() {
-  const item = state.catalog.lessons.find((lesson) => lesson.grade === valueOf("grade") && lesson.topic === valueOf("topic") && lesson.lesson === valueOf("lesson"));
+  const item = getEffectiveLessons().find((lesson) => lesson.grade === valueOf("grade") && lesson.topic === valueOf("topic") && lesson.lesson === valueOf("lesson"));
   setValue("lessonName", item?.lessonName || "");
 }
 
 function refreshFilterTopicOptions() {
   const grade = valueOf("filterGrade");
-  const topics = [...new Set(state.catalog.lessons
+  const topics = [...new Set(getEffectiveLessons()
     .filter((item) => !grade || item.grade === grade)
     .map((item) => item.topic))];
   const select = document.querySelector("#filterTopic");
@@ -323,7 +369,7 @@ function refreshFilterTopicOptions() {
 function refreshFilterLessonOptions() {
   const grade = valueOf("filterGrade");
   const topic = valueOf("filterTopic");
-  const lessons = state.catalog.lessons.filter((item) =>
+  const lessons = getEffectiveLessons().filter((item) =>
     (!grade || item.grade === grade) && (!topic || item.topic === topic));
   const select = document.querySelector("#filterLesson");
   const current = select.value;
