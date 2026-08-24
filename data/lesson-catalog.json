@@ -42,60 +42,494 @@
       "lessonName": "Internet"
     },
     {
-      "grade": "7",
-      "book": "Cánh Diều",
-      "topic": "Chủ đề A. Máy tính và cộng đồng",
-      "lesson": "Bài 1",
-      "lessonName": "Thiết bị vào và thiết bị ra"
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 3. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
+      "lesson": "Bài 6",
+      "lessonName": "Mạng thông tin toàn cầu"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 3. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
+      "lesson": "Bài 7",
+      "lessonName": "Tìm kiếm thông tin trên Internet"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 3. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
+      "lesson": "Bài 8",
+      "lessonName": "Thư điện tử"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 3. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
+      "lesson": "Bài 9",
+      "lessonName": "An toàn thông tin trên Internet"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 10",
+      "lessonName": "Sơ đồ tư duy"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 11",
+      "lessonName": "Định dạng văn bản"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 12",
+      "lessonName": "Trình bày thông tin ở dạng bảng"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 13",
+      "lessonName": "Thực hành: Tìm kiếm và thay thế"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 14",
+      "lessonName": "Thực hành tổng hợp: Hoàn thiện sổ lưu niệm"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 15",
+      "lessonName": "Thuật toán"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 16",
+      "lessonName": "Các cấu trúc điều khiển"
+    },
+    {
+      "grade": "6",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 17",
+      "lessonName": "Chương trình máy tính"
     },
     {
       "grade": "7",
-      "book": "Cánh Diều",
-      "topic": "Chủ đề A. Máy tính và cộng đồng",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 1. Máy tính và cộng đồng",
+      "lesson": "Bài 1",
+      "lessonName": "Thiết bị vào – ra"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 1. Máy tính và cộng đồng",
       "lesson": "Bài 2",
-      "lessonName": "Hệ điều hành và phần mềm ứng dụng"
+      "lessonName": "Phần mềm máy tính"
     },
     {
       "grade": "7",
-      "book": "Cánh Diều",
-      "topic": "Chủ đề C. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
-      "lesson": "Bài 1",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 1. Máy tính và cộng đồng",
+      "lesson": "Bài 3",
+      "lessonName": "Quản lí dữ liệu trong máy tính"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 2. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
+      "lesson": "Bài 4",
       "lessonName": "Mạng xã hội và một số kênh trao đổi thông tin trên Internet"
     },
     {
-      "grade": "8",
-      "book": "Cánh Diều",
-      "topic": "Chủ đề C. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
-      "lesson": "Bài 1",
-      "lessonName": "Dữ liệu số trong thời đại thông tin"
-    },
-    {
-      "grade": "8",
-      "book": "Cánh Diều",
-      "topic": "Chủ đề E. Ứng dụng tin học",
-      "lesson": "Bài 1",
-      "lessonName": "Xử lí đồ họa trong văn bản"
-    },
-    {
-      "grade": "8",
-      "book": "Cánh Diều",
-      "topic": "Chủ đề E. Ứng dụng tin học",
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 3. Đạo đức, pháp luật và văn hoá trong môi trường số",
       "lesson": "Bài 5",
-      "lessonName": "Các kiểu địa chỉ trong bảng tính"
+      "lessonName": "Ứng xử trên mạng"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 6",
+      "lessonName": "Làm quen với phần mềm bảng tính"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 7",
+      "lessonName": "Tính toán tự động trên bảng tính"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 8",
+      "lessonName": "Công cụ hỗ trợ tính toán"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 9",
+      "lessonName": "Trình bày bảng tính"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 10",
+      "lessonName": "Hoàn thiện bảng tính"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 11",
+      "lessonName": "Tạo bài trình chiếu"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 12",
+      "lessonName": "Định dạng đối tượng trên trang chiếu"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 13",
+      "lessonName": "Thực hành tổng hợp: Hoàn thiện bài trình chiếu"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 14",
+      "lessonName": "Thuật toán tìm kiếm tuần tự"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 15",
+      "lessonName": "Thuật toán tìm kiếm nhị phân"
+    },
+    {
+      "grade": "7",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 16",
+      "lessonName": "Thuật toán sắp xếp"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 1. Máy tính và cộng đồng",
+      "lesson": "Bài 1",
+      "lessonName": "Lược sử công cụ tính toán"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 2. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
+      "lesson": "Bài 2",
+      "lessonName": "Thông tin trong môi trường số"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 2. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
+      "lesson": "Bài 3",
+      "lessonName": "Thực hành: Khai thác thông tin số"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 3. Đạo đức, pháp luật và văn hoá trong môi trường số",
+      "lesson": "Bài 4",
+      "lessonName": "Đạo đức và văn hoá trong sử dụng công nghệ kĩ thuật số"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 5",
+      "lessonName": "Sử dụng bảng tính giải quyết bài toán thực tế"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 6",
+      "lessonName": "Sắp xếp và lọc dữ liệu"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 7",
+      "lessonName": "Trực quan hoá dữ liệu"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 8a",
+      "lessonName": "Làm việc với danh sách dạng liệt kê và hình ảnh trong văn bản"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 9a",
+      "lessonName": "Tạo đầu trang, chân trang cho văn bản"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 10a",
+      "lessonName": "Định dạng nâng cao cho trang chiếu"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 11a",
+      "lessonName": "Sử dụng bản mẫu tạo bài trình chiếu"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 8b",
+      "lessonName": "Phần mềm chỉnh sửa ảnh"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 9b",
+      "lessonName": "Thay đổi khung hình, kích thước ảnh"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 10b",
+      "lessonName": "Thêm văn bản, tạo hiệu ứng cho ảnh"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 11b",
+      "lessonName": "Thực hành tổng hợp"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 12",
+      "lessonName": "Từ thuật toán đến chương trình"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 13",
+      "lessonName": "Biểu diễn dữ liệu"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 14",
+      "lessonName": "Cấu trúc điều khiển"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 15",
+      "lessonName": "Gỡ lỗi"
+    },
+    {
+      "grade": "8",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 6. Hướng nghiệp với tin học",
+      "lesson": "Bài 16",
+      "lessonName": "Tin học với nghề nghiệp"
     },
     {
       "grade": "9",
-      "book": "Cánh Diều",
-      "topic": "Chủ đề E. Ứng dụng tin học",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 1. Máy tính và cộng đồng",
       "lesson": "Bài 1",
-      "lessonName": "Xác thực dữ liệu nhập vào bảng tính"
+      "lessonName": "Thế giới kĩ thuật số"
     },
     {
       "grade": "9",
-      "book": "Cánh Diều",
-      "topic": "Chủ đề F. Giải quyết vấn đề với sự trợ giúp của máy tính",
-      "lesson": "Bài 1",
-      "lessonName": "Phần mềm mô phỏng và ứng dụng"
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 2. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
+      "lesson": "Bài 2",
+      "lessonName": "Thông tin trong giải quyết vấn đề"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 2. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin",
+      "lesson": "Bài 3",
+      "lessonName": "Thực hành: Đánh giá chất lượng thông tin"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 3. Đạo đức, pháp luật và văn hoá trong môi trường số",
+      "lesson": "Bài 4",
+      "lessonName": "Một số vấn đề pháp lí về sử dụng dịch vụ Internet"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 5",
+      "lessonName": "Tìm hiểu phần mềm mô phỏng"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 6",
+      "lessonName": "Thực hành: Khai thác phần mềm mô phỏng"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 7",
+      "lessonName": "Trình bày thông tin trong trao đổi và hợp tác"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 8",
+      "lessonName": "Thực hành: Sử dụng công cụ trực quan trình bày thông tin trong trao đổi và hợp tác"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 9a",
+      "lessonName": "Sử dụng công cụ xác thực dữ liệu"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 10a",
+      "lessonName": "Sử dụng hàm COUNTIF"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 11a",
+      "lessonName": "Sử dụng hàm SUMIF"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 12a",
+      "lessonName": "Sử dụng hàm IF"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 13a",
+      "lessonName": "Hoàn thiện bảng tính quản lí tài chính gia đình"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 9b",
+      "lessonName": "Các chức năng chính của phần mềm làm video"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 10b",
+      "lessonName": "Chuẩn bị dữ liệu và dựng video"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 11b",
+      "lessonName": "Thực hành: Dựng video theo kịch bản"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 12b",
+      "lessonName": "Hoàn thành việc dựng video"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 4. Ứng dụng tin học",
+      "lesson": "Bài 13b",
+      "lessonName": "Biên tập và xuất video"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 14",
+      "lessonName": "Giải quyết vấn đề"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 15",
+      "lessonName": "Bài toán tin học"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 5. Giải quyết vấn đề với sự trợ giúp của máy tính",
+      "lesson": "Bài 16",
+      "lessonName": "Thực hành: Lập chương trình máy tính"
+    },
+    {
+      "grade": "9",
+      "book": "Kết nối tri thức",
+      "topic": "Chủ đề 6. Hướng nghiệp với tin học",
+      "lesson": "Bài 17",
+      "lessonName": "Tin học và thế giới nghề nghiệp"
     }
   ]
 }
