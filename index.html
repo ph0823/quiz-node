@@ -1,221 +1,425 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chương trình Trắc nghiệm</title>
-    <style>
-        /* Thiết lập cơ bản */
-        body { 
-            font-family: 'Inter', Arial, sans-serif; 
-            max-width: 800px; 
-            margin: 20px auto; 
-            padding: 20px; 
-            background-color: #f4f7f6;
-            color: #333;
-        }
-        h1 {
-            color: #007bff;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-        }
-
-        /* Phần thông tin học sinh */
-        #student-info {
-          background-color: #fff;
-          border: 1px solid #dee2e6;
-          padding: 20px;
-          border-radius: 12px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-          margin-bottom: 30px;
-        }
-        #student-info h3 {
-          margin-top: 0;
-          color: #007bff;
-        }
-        #student-info label {
-          display: block;
-          margin-bottom: 6px;
-          font-weight: 500;
-        }
-        /* Cập nhật style cho cả input và select */
-        #student-info input, #student-info select {
-          width: 100%;
-          padding: 10px;
-          margin-bottom: 15px;
-          border: 1px solid #ced4da;
-          border-radius: 6px;
-          font-size: 1em;
-        }
-        
-        /* Màu cho input tên tự động điền */
-        #student-name[disabled] {
-            background-color: #f0f7ff;
-            color: #007bff;
-            border-color: #007bff;
-            font-weight: bold;
-        }
-
-
-        /* Khung câu hỏi */
-        .question-box { 
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            padding: 20px; 
-            margin-bottom: 25px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-        }
-        h4 {
-            margin-top: 0;
-            color: #495057;
-        }
-
-        /* Tùy chọn đáp án */
-        .options {
-            margin-top: 15px;
-        }
-        .option-label {
-            display: flex; /* SỬA LỖI: Dùng Flexbox để căn chỉnh Input và Text */
-            align-items: center; /* Căn giữa theo chiều dọc */
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            transition: background-color 0.2s, border-color 0.2s;
-            cursor: pointer;
-            border: 1px solid #ced4da; /* Đường viền nhẹ */
-        }
-        
-        /* Hiệu ứng Hover và Trạng thái Đã chọn (trước khi nộp bài) */
-        .option-label:hover {
-            background-color: #e9ecef;
-        }
-        /* Sử dụng :has() để tạo kiểu cho label khi input bên trong được chọn */
-        .option-label:has(input:checked) {
-            background-color: #d1e7dd; /* Xanh lá nhạt khi chọn */
-            border-color: #badbcc;
-        }
-
-        /* ĐẢM BẢO INPUT LUÔN HIỂN THỊ và căn chỉnh */
-        .options input {
-            /* Đảm bảo input gốc hiển thị */
-            appearance: auto !important; 
-            opacity: 1 !important;      
-            position: static !important;
-            width: initial !important;  
-            height: initial !important; 
-            
-            margin-right: 12px; /* Khoảng cách giữa nút và chữ */
-            flex-shrink: 0; 
-            cursor: pointer; /* Giữ con trỏ chuột pointer cho input */
-        }
-        .options span {
-            font-size: 1.05em;
-        }
-
-        /* Nút Nộp bài */
-        #submit-btn {
-            
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2em;
-            color: white;
-            background-color: #007bff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s, box-shadow 0.3s;
-            margin-top: 30px;
-        }
-        #submit-btn:hover {
-            background-color: #0056b3;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-        }
-        
-        /* Hiển thị kết quả */
-        #result {
-            margin-top: 30px;
-            padding: 20px;
-            border: 2px dashed #ffc107;
-            border-radius: 12px;
-            background-color: #fff3cd;
-            text-align: center;
-        }
-
-        /* Hiển thị danh sách câu sai */
-        #wrong-answers {
-             
-            margin-top: 20px; 
-            padding: 10px 20px; 
-            background-color: #ffc107; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer;
-        }
-        
-        /* Giải thích đáp án */
-        .explanation {
-            border-top: 1px dashed #ced4da;
-            padding-top: 10px !important;
-        }
-
-        /* bộ đếm thời gian */
-        #timer-box {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          background-color: rgba(255, 243, 205, 0.8); /* Màu vàng nhạt có độ mờ */
-          color: #dc3545;
-          font-size: 0.95em; /* Thu nhỏ chữ */
-          font-weight: 600;
-          text-align: center;
-          padding: 8px 0;
-          border-bottom: 1px solid #ffc107;
-          z-index: 9999;
-          backdrop-filter: blur(4px); /* Hiệu ứng mờ nền */
-          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ngân hàng câu hỏi Tin học THCS</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>Kiểm tra trắc nghiệm</h1>
-    
-    <div id="student-info" style="margin-bottom: 30px;">
-        
-      <h3>Thông tin học sinh</h3>
-      
-      <label for="student-class">Lớp:</label>
-      <select id="student-class" required>
-        <option value="">-- Đang tải Lớp... --</option>
-      </select>
-      
-      <label for="student-stt">Số thứ tự (STT):</label>
-      <input type="number" id="student-stt" required placeholder="Nhập số thứ tự">
-
-      <label for="student-name">Họ và tên:</label>
-      <input type="text" id="student-name" disabled required placeholder="Tên học sinh sẽ tự động điền">
-
-      
-      <button id="start-btn" style="padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer;">Làm bài</button>   
-
+  <header class="app-header">
+    <div>
+      <h1>Ngân hàng câu hỏi Tin học THCS</h1>
+      <p>Quản lý câu hỏi trắc nghiệm theo bài học, chủ đề và mức độ</p>
     </div>
-    
-    <div id="timer-box" style="display: none;">  ⏱️ Thời gian: <span id="timer"></span></div>
-
-    <div id="quiz-container" style="display: none;">        
-        Đang tải câu hỏi...
+    <div class="header-actions">
+      <span id="syncStatus" class="sync-status local" title="Trạng thái đồng bộ">Chỉ lưu trên máy</span>
+      <button id="btnSyncNow" class="btn secondary">Đồng bộ</button>
+      <button id="btnCloudSettings" class="btn secondary">Cài đặt Google Sheets</button>
+      <button id="btnBulkImport" class="btn secondary">Nhập Excel/CSV</button>
+      <button id="btnImport" class="btn secondary">Nhập JSON</button>
+      <button id="btnExportExcel" class="btn secondary">Xuất Excel</button>
+      <button id="btnExport" class="btn secondary">Xuất JSON</button>
+      <button id="btnValidateAll" class="btn secondary">Kiểm định toàn bộ</button>
+      <button id="btnReset" class="btn danger-outline">Khôi phục dữ liệu mẫu</button>
+      <input id="fileImport" type="file" accept=".json,application/json" hidden>
+      <input id="fileBulkImport" type="file" accept=".xlsx,.xls,.csv,text/csv" hidden>
     </div>
-    
-    <button id="submit-btn" style="display: none;">NỘP BÀI</button>
-    
-    <div id="result"></div>
-    <button id="show-wrong-btn" style="display: none;">Danh sách câu sai</button>
-    <div id="wrong-answers" style="margin-top: 20px;"></div>
+  </header>
 
-    <script src="app.js"></script>
+  <main class="container">
+    <section class="stats-grid">
+      <article class="stat-card">
+        <span>Tổng câu hỏi</span>
+        <strong id="statTotal">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>Nhận biết</span>
+        <strong id="statNB">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>Thông hiểu</span>
+        <strong id="statTH">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>Vận dụng</span>
+        <strong id="statVD">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>Đã duyệt</span>
+        <strong id="statApproved">0</strong>
+      </article>
+      <article class="stat-card">
+        <span>Cần xem lại</span>
+        <strong id="statNeedsReview">0</strong>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Bộ lọc</h2>
+          <p>Lọc nhanh câu hỏi trong ngân hàng</p>
+        </div>
+        <button id="btnClearFilters" class="btn link-btn">Xóa bộ lọc</button>
+      </div>
+
+      <div class="filter-grid">
+        <label>
+          Từ khóa
+          <input id="filterKeyword" type="search" placeholder="Nhập nội dung, bài học, từ khóa...">
+        </label>
+
+        <label>
+          Khối lớp
+          <select id="filterGrade">
+            <option value="">Tất cả</option>
+            <option value="6">Lớp 6</option>
+            <option value="7">Lớp 7</option>
+            <option value="8">Lớp 8</option>
+            <option value="9">Lớp 9</option>
+          </select>
+        </label>
+
+        <label>
+          Chủ đề
+          <input id="filterTopic" type="text" placeholder="Ví dụ: Chủ đề A">
+        </label>
+
+        <label>
+          Bài học
+          <input id="filterLesson" type="text" placeholder="Ví dụ: Bài 1">
+        </label>
+
+        <label>
+          Mức độ
+          <select id="filterLevel">
+            <option value="">Tất cả</option>
+            <option value="NB">Nhận biết</option>
+            <option value="TH">Thông hiểu</option>
+            <option value="VD">Vận dụng</option>
+          </select>
+        </label>
+
+        <label>
+          Trạng thái
+          <select id="filterStatus">
+            <option value="">Tất cả</option>
+            <option value="draft">Nháp</option>
+            <option value="approved">Đã duyệt</option>
+            <option value="inactive">Ngừng sử dụng</option>
+          </select>
+        </label>
+
+        <label>
+          Chất lượng
+          <select id="filterQuality">
+            <option value="">Tất cả</option>
+            <option value="good">Đạt</option>
+            <option value="warning">Cần xem lại</option>
+            <option value="blocking">Có lỗi nghiêm trọng</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Danh sách câu hỏi</h2>
+          <p id="resultCount">0 câu hỏi</p>
+        </div>
+        <button id="btnAdd" class="btn primary">+ Thêm câu hỏi</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã</th>
+              <th>Khối</th>
+              <th>Bài học</th>
+              <th>Mức độ</th>
+              <th>Nội dung</th>
+              <th>Đáp án</th>
+              <th>Chất lượng</th>
+              <th>Trạng thái</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="questionTableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="emptyState" class="empty-state" hidden>
+        Chưa có câu hỏi phù hợp.
+      </div>
+    </section>
+  </main>
+
+  <dialog id="questionDialog">
+    <form id="questionForm" method="dialog">
+      <div class="dialog-header">
+        <div>
+          <h2 id="dialogTitle">Thêm câu hỏi</h2>
+          <p>Nhập đầy đủ thông tin và bốn phương án lựa chọn.</p>
+        </div>
+        <button type="button" id="btnCloseDialog" class="icon-btn" aria-label="Đóng">×</button>
+      </div>
+
+      <input id="questionId" type="hidden">
+
+      <div class="form-grid">
+        <label>
+          Khối lớp *
+          <select id="grade" required>
+            <option value="">Chọn khối</option>
+            <option value="6">Lớp 6</option>
+            <option value="7">Lớp 7</option>
+            <option value="8">Lớp 8</option>
+            <option value="9">Lớp 9</option>
+          </select>
+        </label>
+
+        <label>
+          Bộ sách
+          <input id="bookDisplay" value="Kết nối tri thức" readonly>
+          <input id="book" type="hidden" value="Kết nối tri thức">
+        </label>
+
+        <label>
+          Chủ đề *
+          <input id="topic" list="topicOptions" required placeholder="Chọn hoặc nhập chủ đề">
+          <datalist id="topicOptions"></datalist>
+        </label>
+
+        <label>
+          Bài học *
+          <input id="lesson" list="lessonOptions" required placeholder="Chọn hoặc nhập, ví dụ: Bài 1">
+          <datalist id="lessonOptions"></datalist>
+        </label>
+
+        <label class="full">
+          Tên bài học *
+          <input id="lessonName" required placeholder="Tự động theo danh mục hoặc nhập thủ công">
+        </label>
+
+        <label>
+          Mức độ *
+          <select id="level" required>
+            <option value="">Chọn mức độ</option>
+            <option value="NB">Nhận biết</option>
+            <option value="TH">Thông hiểu</option>
+            <option value="VD">Vận dụng</option>
+          </select>
+        </label>
+
+        <label>
+          Trạng thái *
+          <select id="status" required>
+            <option value="draft">Nháp</option>
+            <option value="approved">Đã duyệt</option>
+            <option value="inactive">Ngừng sử dụng</option>
+          </select>
+        </label>
+
+        <label class="full">
+          Nội dung câu hỏi *
+          <textarea id="content" rows="3" required></textarea>
+        </label>
+
+        <fieldset class="full">
+          <legend>Các phương án *</legend>
+          <div class="option-row">
+            <input type="radio" name="correctAnswer" value="0" required>
+            <span>A.</span>
+            <input id="optionA" required placeholder="Phương án A">
+          </div>
+          <div class="option-row">
+            <input type="radio" name="correctAnswer" value="1">
+            <span>B.</span>
+            <input id="optionB" required placeholder="Phương án B">
+          </div>
+          <div class="option-row">
+            <input type="radio" name="correctAnswer" value="2">
+            <span>C.</span>
+            <input id="optionC" required placeholder="Phương án C">
+          </div>
+          <div class="option-row">
+            <input type="radio" name="correctAnswer" value="3">
+            <span>D.</span>
+            <input id="optionD" required placeholder="Phương án D">
+          </div>
+          <small>Chọn nút tròn trước phương án đúng.</small>
+        </fieldset>
+
+        <label class="full">
+          Giải thích đáp án *
+          <textarea id="explanation" rows="3" required></textarea>
+        </label>
+
+        <label class="full">
+          Từ khóa
+          <input id="tags" placeholder="Nhập các từ khóa, cách nhau bằng dấu phẩy">
+        </label>
+
+        <section class="quality-panel full" id="qualityPanel">
+          <div class="quality-heading">
+            <div>
+              <strong>Kiểm định chất lượng</strong>
+              <p id="qualitySummary">Nhập nội dung để xem đánh giá.</p>
+            </div>
+            <span id="qualityScore" class="quality-score">--</span>
+          </div>
+          <ul id="qualityIssues" class="quality-issues"></ul>
+        </section>
+      </div>
+
+      <div id="formErrors" class="form-errors" hidden></div>
+
+      <div class="dialog-actions">
+        <button type="button" id="btnCancel" class="btn secondary">Hủy</button>
+        <button type="submit" class="btn primary">Lưu câu hỏi</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="bulkImportDialog">
+    <form method="dialog" class="bulk-form">
+      <div class="dialog-header">
+        <div>
+          <h2>Nhập câu hỏi hàng loạt</h2>
+          <p>Chọn tệp Excel hoặc CSV theo đúng mẫu cột.</p>
+        </div>
+        <button type="button" id="btnCloseBulkDialog" class="icon-btn" aria-label="Đóng">×</button>
+      </div>
+      <div class="import-help">
+        <strong>Các cột bắt buộc:</strong> grade, topic, lesson, lessonName, level, content, optionA, optionB, optionC, optionD, correctAnswer, explanation. Cột book có thể bỏ trống; ứng dụng tự dùng “Kết nối tri thức”.
+        <br><strong>correctAnswer:</strong> nhập A/B/C/D hoặc 0/1/2/3.
+      </div>
+      <div id="bulkSummary" class="bulk-summary"></div>
+      <div class="table-wrapper preview-wrapper">
+        <table>
+          <thead><tr><th>Dòng</th><th>Trạng thái</th><th>Nội dung</th><th>Lỗi</th></tr></thead>
+          <tbody id="bulkPreviewBody"></tbody>
+        </table>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" id="btnChooseBulkFile" class="btn secondary">Chọn tệp khác</button>
+        <button type="button" id="btnConfirmBulkImport" class="btn primary" disabled>Nhập câu hợp lệ</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="validationDialog">
+    <form method="dialog" class="validation-form">
+      <div class="dialog-header">
+        <div>
+          <h2>Kết quả kiểm định toàn bộ</h2>
+          <p id="validationSummary"></p>
+        </div>
+        <button type="button" id="btnCloseValidationDialog" class="icon-btn" aria-label="Đóng">×</button>
+      </div>
+      <div class="table-wrapper preview-wrapper">
+        <table>
+          <thead><tr><th>Mã</th><th>Điểm</th><th>Kết quả</th><th>Vấn đề cần xem</th></tr></thead>
+          <tbody id="validationTableBody"></tbody>
+        </table>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" id="btnExportValidation" class="btn secondary">Xuất báo cáo CSV</button>
+        <button type="button" id="btnCloseValidationBottom" class="btn primary">Đóng</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="syncSettingsDialog">
+    <form id="syncSettingsForm" method="dialog" class="sync-form">
+      <div class="dialog-header">
+        <div>
+          <h2>Kết nối Google Sheets</h2>
+          <p>Lưu tập trung thông qua Google Apps Script Web App.</p>
+        </div>
+        <button type="button" id="btnCloseSyncSettings" class="icon-btn" aria-label="Đóng">×</button>
+      </div>
+
+      <div class="sync-note">
+        Dán URL kết thúc bằng <code>/exec</code> và mã truy cập được tạo trong Google Apps Script.
+        Không ghi mã truy cập trực tiếp vào mã nguồn GitHub.
+      </div>
+
+      <div class="form-grid">
+        <label class="full">
+          URL Google Apps Script Web App
+          <input id="gasWebAppUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec">
+        </label>
+        <label class="full">
+          Mã truy cập
+          <input id="gasAccessToken" type="password" autocomplete="off" placeholder="Mã trong sheet CauHinh">
+        </label>
+        <label class="sync-checkbox full">
+          <input id="autoSyncEnabled" type="checkbox" checked>
+          <span>Tự động ghi lên Google Sheets sau khi thay đổi dữ liệu</span>
+        </label>
+      </div>
+
+      <div id="syncTestResult" class="sync-test-result" hidden></div>
+
+      <div class="dialog-actions sync-actions">
+        <button type="button" id="btnDisconnectCloud" class="btn danger-outline-light">Ngắt kết nối</button>
+        <span class="action-spacer"></span>
+        <button type="button" id="btnTestCloud" class="btn secondary">Kiểm tra kết nối</button>
+        <button type="button" id="btnPullCloud" class="btn secondary">Tải từ Sheets</button>
+        <button type="button" id="btnPushCloud" class="btn secondary">Ghi lên Sheets</button>
+        <button type="submit" class="btn primary">Lưu cài đặt</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="syncChoiceDialog">
+    <form method="dialog" class="sync-form">
+      <div class="dialog-header">
+        <div>
+          <h2>Đồng bộ dữ liệu</h2>
+          <p>Chọn hướng đồng bộ phù hợp.</p>
+        </div>
+        <button type="button" id="btnCloseSyncChoice" class="icon-btn" aria-label="Đóng">×</button>
+      </div>
+      <div class="sync-choice-grid">
+        <button type="button" id="btnSyncPullChoice" class="sync-choice-card">
+          <strong>Tải từ Google Sheets</strong>
+          <span>Thay dữ liệu trên thiết bị bằng ngân hàng đang lưu tập trung.</span>
+        </button>
+        <button type="button" id="btnSyncPushChoice" class="sync-choice-card">
+          <strong>Ghi lên Google Sheets</strong>
+          <span>Thay dữ liệu trên Sheets bằng ngân hàng hiện có trên thiết bị.</span>
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <template id="rowTemplate">
+    <tr>
+      <td class="col-id"></td>
+      <td class="col-grade"></td>
+      <td class="col-lesson"></td>
+      <td class="col-level"></td>
+      <td class="col-content"></td>
+      <td class="col-answer"></td>
+      <td class="col-quality"></td>
+      <td class="col-status"></td>
+      <td class="col-actions">
+        <button class="btn-small edit">Sửa</button>
+        <button class="btn-small duplicate">Nhân bản</button>
+        <button class="btn-small validate">Kiểm định</button>
+        <button class="btn-small delete">Ngừng dùng</button>
+      </td>
+    </tr>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
