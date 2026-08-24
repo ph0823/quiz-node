@@ -34,6 +34,7 @@ async function init() {
   loadSyncConfig();
   await Promise.all([loadCatalog(), loadQuestions()]);
   normalizeAllQuestions(false);
+  refreshFilterTopicOptions();
   render();
   state.sync.ready = true;
   updateSyncStatus();
@@ -97,11 +98,14 @@ function bindEvents() {
     radio.addEventListener("change", updateLiveQuality);
   });
 
-  ["filterKeyword", "filterGrade", "filterTopic", "filterLesson", "filterLevel", "filterStatus", "filterQuality"]
+  ["filterKeyword", "filterLevel", "filterStatus", "filterQuality"]
     .forEach((id) => {
       on(id, "input", render);
       on(id, "change", render);
     });
+  on("filterGrade", "change", refreshFilterTopicOptions);
+  on("filterTopic", "change", refreshFilterLessonOptions);
+  on("filterLesson", "change", render);
 }
 
 function on(id, eventName, handler) {
@@ -233,10 +237,11 @@ function openCreateDialog() {
   setValue("book", DEFAULT_BOOK);
   setValue("bookDisplay", DEFAULT_BOOK);
   setValue("status", "draft");
+  setValue("grade", "6");
   setValue("lessonName", "");
   els.dialogTitle.textContent = "Thêm câu hỏi";
   hideErrors();
-  refreshTopicOptions();
+  refreshTopicOptions("Chủ đề 1. Máy tính và cộng đồng");
   updateLiveQuality();
   els.questionDialog.showModal();
 }
@@ -276,10 +281,11 @@ function refreshTopicOptions(selectedTopic = "") {
   const topics = [...new Set(state.catalog.lessons
     .filter((item) => item.grade === grade)
     .map((item) => item.topic))];
-  document.querySelector("#topicOptions").innerHTML = topics
-    .map((topic) => `<option value="${escapeHtml(topic)}"></option>`).join("");
-  if (selectedTopic) setValue("topic", selectedTopic);
-  else { setValue("topic", ""); setValue("lesson", ""); setValue("lessonName", ""); }
+  const topicSelect = document.querySelector("#topic");
+  topicSelect.innerHTML = `<option value="">Chọn chủ đề</option>` + topics
+    .map((topic) => `<option value="${escapeHtml(topic)}">${escapeHtml(topic)}</option>`).join("");
+  const nextTopic = selectedTopic && topics.includes(selectedTopic) ? selectedTopic : (topics[0] || "");
+  setValue("topic", nextTopic);
   refreshLessonOptions();
 }
 
@@ -287,16 +293,44 @@ function refreshLessonOptions(selectedLesson = "") {
   const grade = valueOf("grade");
   const topic = valueOf("topic");
   const lessons = state.catalog.lessons.filter((item) => item.grade === grade && item.topic === topic);
-  document.querySelector("#lessonOptions").innerHTML = lessons
-    .map((item) => `<option value="${escapeHtml(item.lesson)}" label="${escapeHtml(item.lessonName)}"></option>`).join("");
-  if (selectedLesson) setValue("lesson", selectedLesson);
-  else if (!lessons.some((item) => item.lesson === valueOf("lesson"))) { setValue("lesson", ""); setValue("lessonName", ""); }
+  const lessonSelect = document.querySelector("#lesson");
+  lessonSelect.innerHTML = `<option value="">Chọn bài học</option>` + lessons
+    .map((item) => `<option value="${escapeHtml(item.lesson)}">${escapeHtml(item.lesson)} – ${escapeHtml(item.lessonName)}</option>`).join("");
+  const nextLesson = selectedLesson && lessons.some((item) => item.lesson === selectedLesson)
+    ? selectedLesson : (lessons[0]?.lesson || "");
+  setValue("lesson", nextLesson);
   syncLessonName();
 }
 
 function syncLessonName() {
   const item = state.catalog.lessons.find((lesson) => lesson.grade === valueOf("grade") && lesson.topic === valueOf("topic") && lesson.lesson === valueOf("lesson"));
   setValue("lessonName", item?.lessonName || "");
+}
+
+function refreshFilterTopicOptions() {
+  const grade = valueOf("filterGrade");
+  const topics = [...new Set(state.catalog.lessons
+    .filter((item) => !grade || item.grade === grade)
+    .map((item) => item.topic))];
+  const select = document.querySelector("#filterTopic");
+  const current = select.value;
+  select.innerHTML = `<option value="">Tất cả</option>` + topics
+    .map((topic) => `<option value="${escapeHtml(topic)}">${escapeHtml(topic)}</option>`).join("");
+  select.value = topics.includes(current) ? current : "";
+  refreshFilterLessonOptions();
+}
+
+function refreshFilterLessonOptions() {
+  const grade = valueOf("filterGrade");
+  const topic = valueOf("filterTopic");
+  const lessons = state.catalog.lessons.filter((item) =>
+    (!grade || item.grade === grade) && (!topic || item.topic === topic));
+  const select = document.querySelector("#filterLesson");
+  const current = select.value;
+  select.innerHTML = `<option value="">Tất cả</option>` + lessons
+    .map((item) => `<option value="${escapeHtml(item.lesson)}">${escapeHtml(item.lesson)} – ${escapeHtml(item.lessonName)}</option>`).join("");
+  select.value = lessons.some((item) => item.lesson === current) ? current : "";
+  render();
 }
 
 function collectFormQuestion() {
@@ -655,14 +689,15 @@ function isQuestionShape(question) {
 async function resetSampleData() {
   if (!confirm("Khôi phục dữ liệu mẫu sẽ thay toàn bộ dữ liệu hiện tại. Bạn nên Xuất JSON trước khi tiếp tục.")) return;
   await loadSampleData();
+  persist(true);
   clearFilters();
   render();
 }
 
 function clearFilters() {
-  ["filterKeyword", "filterGrade", "filterTopic", "filterLesson", "filterLevel", "filterStatus", "filterQuality"]
+  ["filterKeyword", "filterGrade", "filterLevel", "filterStatus", "filterQuality"]
     .forEach((id) => setValue(id, ""));
-  render();
+  refreshFilterTopicOptions();
 }
 
 function generateQuestionId(question) {
