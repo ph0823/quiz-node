@@ -146,3 +146,14 @@ Kiểm định chỉ hỗ trợ phát hiện dấu hiệu kỹ thuật. Giáo vi
 - Vẫn giữ bản cục bộ để ứng dụng tải nhanh và hoạt động khi mất mạng tạm thời.
 
 Xem hướng dẫn chi tiết tại `apps-script/HUONG-DAN-TRIEN-KHAI.md`.
+
+
+## Cập nhật 4.1 – dữ liệu mẫu Chủ đề 1 và danh sách chọn
+
+- Bổ sung 30 câu hỏi mẫu cho Chủ đề 1 lớp 6 Kết nối tri thức.
+- Mỗi bài có 10 câu: 4 Nhận biết, 4 Thông hiểu, 2 Vận dụng.
+- Chủ đề 1 gồm Bài 1: Thông tin và dữ liệu; Bài 2: Xử lí thông tin; Bài 3: Thông tin trong máy tính.
+- Bộ lọc Chủ đề và Bài học dùng danh sách chọn liên kết.
+- Biểu mẫu thêm câu hỏi mặc định Lớp 6, Chủ đề 1 và Bài 1.
+- Tên bài học được điền tự động và không cần nhập tay.
+- Nút Khôi phục dữ liệu mẫu sẽ nạp 30 câu và tự đồng bộ nếu Google Sheets đã được cấu hình.

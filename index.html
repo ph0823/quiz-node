@@ -83,12 +83,16 @@
 
         <label>
           Chủ đề
-          <input id="filterTopic" type="text" placeholder="Ví dụ: Chủ đề A">
+          <select id="filterTopic">
+            <option value="">Tất cả</option>
+          </select>
         </label>
 
         <label>
           Bài học
-          <input id="filterLesson" type="text" placeholder="Ví dụ: Bài 1">
+          <select id="filterLesson">
+            <option value="">Tất cả</option>
+          </select>
         </label>
 
         <label>
@@ -189,19 +193,21 @@
 
         <label>
           Chủ đề *
-          <input id="topic" list="topicOptions" required placeholder="Chọn hoặc nhập chủ đề">
-          <datalist id="topicOptions"></datalist>
+          <select id="topic" required>
+            <option value="">Chọn chủ đề</option>
+          </select>
         </label>
 
         <label>
           Bài học *
-          <input id="lesson" list="lessonOptions" required placeholder="Chọn hoặc nhập, ví dụ: Bài 1">
-          <datalist id="lessonOptions"></datalist>
+          <select id="lesson" required>
+            <option value="">Chọn bài học</option>
+          </select>
         </label>
 
         <label class="full">
           Tên bài học *
-          <input id="lessonName" required placeholder="Tự động theo danh mục hoặc nhập thủ công">
+          <input id="lessonName" required readonly placeholder="Tự động theo bài học đã chọn">
         </label>
 
         <label>
