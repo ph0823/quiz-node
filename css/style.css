@@ -375,3 +375,155 @@ select:disabled, input:read-only { background: #f1f5f9; color: #64748b; }
 .sync-choice-card strong { display: block; margin-bottom: 8px; font-size: 18px; }
 .sync-choice-card span { display: block; color: var(--muted); line-height: 1.5; }
 @media (max-width: 650px) { .sync-choice-grid { grid-template-columns: 1fr; } .sync-actions .btn { flex: 1 1 45%; } .action-spacer { display: none; } }
+
+
+/* Phiên bản 4.3: cửa sổ duyệt câu hỏi */
+.review-dialog {
+  width: min(960px, calc(100% - 24px));
+}
+
+.review-form {
+  padding: 22px;
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+.review-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.badge.neutral {
+  color: #334155;
+  background: #e2e8f0;
+}
+
+.review-question-card,
+.review-section {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 14px;
+  background: #fff;
+}
+
+.review-question-card {
+  background: var(--surface-soft);
+}
+
+.review-code {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.review-question-card h3,
+.review-section h3 {
+  margin: 0 0 14px;
+}
+
+.review-options {
+  display: grid;
+  gap: 10px;
+}
+
+.review-option {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 11px;
+  background: #fff;
+}
+
+.review-option.correct {
+  border: 2px solid #059669;
+  background: #ecfdf5;
+}
+
+.review-option-letter {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-weight: 800;
+  background: #e2e8f0;
+}
+
+.review-option.correct .review-option-letter {
+  color: #fff;
+  background: #059669;
+}
+
+.correct-marker {
+  color: #047857;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.review-quality-heading,
+.review-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-navigation {
+  margin-top: 18px;
+}
+
+.review-extra {
+  display: grid;
+  gap: 10px;
+}
+
+.review-actions {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.warning-button {
+  color: #92400e;
+  background: #fef3c7;
+  border-color: #f59e0b;
+}
+
+.btn-small.review {
+  color: #065f46;
+  background: #d1fae5;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: .5;
+}
+
+.quality-issues li.good {
+  color: #047857;
+}
+
+@media (max-width: 640px) {
+  .review-option {
+    grid-template-columns: 34px 1fr;
+  }
+  .correct-marker {
+    grid-column: 2;
+  }
+  .review-navigation,
+  .review-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .review-navigation .btn,
+  .review-actions .btn {
+    width: 100%;
+  }
+}
