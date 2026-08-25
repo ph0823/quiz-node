@@ -196,11 +196,11 @@ function normalizeStoredQuestion(question) {
   const now = new Date().toISOString();
   return {
     ...question,
-    grade: String(question.grade ?? ""),
+    grade: String(question.grade ?? "").trim(),
     book: DEFAULT_BOOK,
-    topic: String(question.topic ?? ""),
-    lesson: String(question.lesson ?? ""),
-    lessonName: String(question.lessonName ?? ""),
+    topic: String(question.topic ?? "").trim(),
+    lesson: String(question.lesson ?? "").trim(),
+    lessonName: String(question.lessonName ?? "").trim(),
     level: ["NB", "TH", "VD"].includes(question.level) ? question.level : "NB",
     options: Array.isArray(question.options) ? question.options.slice(0, 4).map(String) : ["", "", "", ""],
     correctAnswer: Number.isInteger(question.correctAnswer) ? question.correctAnswer : 0,
@@ -256,16 +256,16 @@ function updateStats() {
 function getFilteredQuestions() {
   const keyword = valueOf("filterKeyword").toLowerCase();
   const grade = valueOf("filterGrade");
-  const topic = valueOf("filterTopic").toLowerCase();
-  const lesson = valueOf("filterLesson").toLowerCase();
+  const topic = valueOf("filterTopic").trim().toLowerCase();
+  const lesson = valueOf("filterLesson").trim().toLowerCase();
   const level = valueOf("filterLevel");
   const status = valueOf("filterStatus");
   const quality = valueOf("filterQuality");
 
   return state.questions
     .filter((q) => !grade || q.grade === grade)
-    .filter((q) => !topic || q.topic.toLowerCase().includes(topic))
-    .filter((q) => !lesson || `${q.lesson} ${q.lessonName}`.toLowerCase().includes(lesson))
+    .filter((q) => !topic || q.topic.trim().toLowerCase() === topic)
+    .filter((q) => !lesson || q.lesson.trim().toLowerCase() === lesson)
     .filter((q) => !level || q.level === level)
     .filter((q) => !status || q.status === status)
     .filter((q) => !quality || assessQuestion(q, q.id).grade === quality)
@@ -741,7 +741,7 @@ async function resetSampleData() {
 }
 
 function clearFilters() {
-  ["filterKeyword", "filterGrade", "filterLevel", "filterStatus", "filterQuality"]
+  ["filterKeyword", "filterGrade", "filterTopic", "filterLesson", "filterLevel", "filterStatus", "filterQuality"]
     .forEach((id) => setValue(id, ""));
   refreshFilterTopicOptions();
 }
