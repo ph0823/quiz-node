@@ -12,62 +12,120 @@
       <h1>Ngân hàng câu hỏi Tin học THCS</h1>
       <p>Quản lý câu hỏi trắc nghiệm theo bài học, chủ đề và mức độ</p>
     </div>
+
     <div class="header-actions">
-      <span id="syncStatus" class="sync-status local" title="Trạng thái đồng bộ">Chỉ lưu trên máy</span>
-      <button id="btnSyncNow" class="btn secondary">Đồng bộ</button>
-      <button id="btnCloudSettings" class="btn secondary">Cài đặt Google Sheets</button>
-      <button id="btnBulkImport" class="btn secondary">Nhập Excel/CSV</button>
-      <button id="btnImport" class="btn secondary">Nhập JSON</button>
-      <button id="btnExportExcel" class="btn secondary">Xuất Excel</button>
-      <button id="btnExport" class="btn secondary">Xuất JSON</button>
-      <button id="btnValidateAll" class="btn secondary">Kiểm định toàn bộ</button>
-      <button id="btnReset" class="btn danger-outline">Khôi phục dữ liệu mẫu</button>
-      <input id="fileImport" type="file" accept=".json,application/json" hidden>
-      <input id="fileBulkImport" type="file" accept=".xlsx,.xls,.csv,text/csv" hidden>
+      <span
+        id="syncStatus"
+        class="sync-status local"
+        title="Trạng thái đồng bộ"
+      >
+        Chỉ lưu trên máy
+      </span>
+
+      <button id="btnSyncNow" class="btn secondary">
+        Đồng bộ
+      </button>
+
+      <button id="btnCloudSettings" class="btn secondary">
+        Cài đặt Google Sheets
+      </button>
+
+      <button id="btnBulkImport" class="btn secondary">
+        Nhập Excel/CSV
+      </button>
+
+      <button id="btnImport" class="btn secondary">
+        Nhập JSON
+      </button>
+
+      <button id="btnExportExcel" class="btn secondary">
+        Xuất Excel
+      </button>
+
+      <button id="btnExport" class="btn secondary">
+        Xuất JSON
+      </button>
+
+      <button id="btnValidateAll" class="btn secondary">
+        Kiểm định toàn bộ
+      </button>
+
+      <button id="btnReset" class="btn danger-outline">
+        Khôi phục dữ liệu mẫu
+      </button>
+
+      <input
+        id="fileImport"
+        type="file"
+        accept=".json,application/json"
+        hidden
+      >
+
+      <input
+        id="fileBulkImport"
+        type="file"
+        accept=".xlsx,.xls,.csv,text/csv"
+        hidden
+      >
     </div>
   </header>
 
   <main class="container">
+
+    <!-- THỐNG KÊ -->
     <section class="stats-grid">
       <article class="stat-card">
         <span>Tổng câu hỏi</span>
         <strong id="statTotal">0</strong>
       </article>
+
       <article class="stat-card">
         <span>Nhận biết</span>
         <strong id="statNB">0</strong>
       </article>
+
       <article class="stat-card">
         <span>Thông hiểu</span>
         <strong id="statTH">0</strong>
       </article>
+
       <article class="stat-card">
         <span>Vận dụng</span>
         <strong id="statVD">0</strong>
       </article>
+
       <article class="stat-card">
         <span>Đã duyệt</span>
         <strong id="statApproved">0</strong>
       </article>
+
       <article class="stat-card">
         <span>Cần xem lại</span>
         <strong id="statNeedsReview">0</strong>
       </article>
     </section>
 
+    <!-- BỘ LỌC -->
     <section class="panel">
       <div class="panel-heading">
         <div>
           <h2>Bộ lọc</h2>
           <p>Lọc nhanh câu hỏi trong ngân hàng</p>
         </div>
-        <button id="btnClearFilters" class="btn link-btn">Xóa bộ lọc</button>
+
+        <button id="btnClearFilters" class="btn link-btn">
+          Xóa bộ lọc
+        </button>
       </div>
 
       <div class="filter-grid">
         <label>
           Từ khóa
-          <input id="filterKeyword" type="search" placeholder="Nhập nội dung, bài học, từ khóa...">
+          <input
+            id="filterKeyword"
+            type="search"
+            placeholder="Nhập nội dung, bài học, từ khóa..."
+          >
         </label>
 
         <label>
@@ -127,13 +185,17 @@
       </div>
     </section>
 
+    <!-- DANH SÁCH CÂU HỎI -->
     <section class="panel">
       <div class="panel-heading">
         <div>
           <h2>Danh sách câu hỏi</h2>
           <p id="resultCount">0 câu hỏi</p>
         </div>
-        <button id="btnAdd" class="btn primary">+ Thêm câu hỏi</button>
+
+        <button id="btnAdd" class="btn primary">
+          + Thêm câu hỏi
+        </button>
       </div>
 
       <div class="table-wrapper">
@@ -145,12 +207,13 @@
               <th>Bài học</th>
               <th>Mức độ</th>
               <th>Nội dung</th>
-              <th>Đáp án</th>
+              <th>Đáp án đúng</th>
               <th>Chất lượng</th>
               <th>Trạng thái</th>
               <th>Thao tác</th>
             </tr>
           </thead>
+
           <tbody id="questionTableBody"></tbody>
         </table>
       </div>
@@ -161,6 +224,7 @@
     </section>
   </main>
 
+  <!-- HỘP THOẠI THÊM / SỬA CÂU HỎI -->
   <dialog id="questionDialog">
     <form id="questionForm" method="dialog">
       <div class="dialog-header">
@@ -168,7 +232,15 @@
           <h2 id="dialogTitle">Thêm câu hỏi</h2>
           <p>Nhập đầy đủ thông tin và bốn phương án lựa chọn.</p>
         </div>
-        <button type="button" id="btnCloseDialog" class="icon-btn" aria-label="Đóng">×</button>
+
+        <button
+          type="button"
+          id="btnCloseDialog"
+          class="icon-btn"
+          aria-label="Đóng"
+        >
+          ×
+        </button>
       </div>
 
       <input id="questionId" type="hidden">
@@ -187,8 +259,17 @@
 
         <label>
           Bộ sách
-          <input id="bookDisplay" value="Kết nối tri thức" readonly>
-          <input id="book" type="hidden" value="Kết nối tri thức">
+          <input
+            id="bookDisplay"
+            value="Kết nối tri thức"
+            readonly
+          >
+
+          <input
+            id="book"
+            type="hidden"
+            value="Kết nối tri thức"
+          >
         </label>
 
         <label>
@@ -207,7 +288,12 @@
 
         <label class="full">
           Tên bài học *
-          <input id="lessonName" required readonly placeholder="Tự động theo bài học đã chọn">
+          <input
+            id="lessonName"
+            required
+            readonly
+            placeholder="Tự động theo bài học đã chọn"
+          >
         </label>
 
         <label>
@@ -231,181 +317,572 @@
 
         <label class="full">
           Nội dung câu hỏi *
-          <textarea id="content" rows="3" required></textarea>
+          <textarea
+            id="content"
+            rows="3"
+            required
+          ></textarea>
         </label>
 
         <fieldset class="full">
           <legend>Các phương án *</legend>
+
           <div class="option-row">
-            <input type="radio" name="correctAnswer" value="0" required>
+            <input
+              type="radio"
+              name="correctAnswer"
+              value="0"
+              required
+            >
             <span>A.</span>
-            <input id="optionA" required placeholder="Phương án A">
+            <input
+              id="optionA"
+              required
+              placeholder="Phương án A"
+            >
           </div>
+
           <div class="option-row">
-            <input type="radio" name="correctAnswer" value="1">
+            <input
+              type="radio"
+              name="correctAnswer"
+              value="1"
+            >
             <span>B.</span>
-            <input id="optionB" required placeholder="Phương án B">
+            <input
+              id="optionB"
+              required
+              placeholder="Phương án B"
+            >
           </div>
+
           <div class="option-row">
-            <input type="radio" name="correctAnswer" value="2">
+            <input
+              type="radio"
+              name="correctAnswer"
+              value="2"
+            >
             <span>C.</span>
-            <input id="optionC" required placeholder="Phương án C">
+            <input
+              id="optionC"
+              required
+              placeholder="Phương án C"
+            >
           </div>
+
           <div class="option-row">
-            <input type="radio" name="correctAnswer" value="3">
+            <input
+              type="radio"
+              name="correctAnswer"
+              value="3"
+            >
             <span>D.</span>
-            <input id="optionD" required placeholder="Phương án D">
+            <input
+              id="optionD"
+              required
+              placeholder="Phương án D"
+            >
           </div>
-          <small>Chọn nút tròn trước phương án đúng.</small>
+
+          <small>
+            Chọn nút tròn trước phương án đúng.
+          </small>
         </fieldset>
 
         <label class="full">
           Giải thích đáp án *
-          <textarea id="explanation" rows="3" required></textarea>
+          <textarea
+            id="explanation"
+            rows="3"
+            required
+          ></textarea>
         </label>
 
         <label class="full">
           Từ khóa
-          <input id="tags" placeholder="Nhập các từ khóa, cách nhau bằng dấu phẩy">
+          <input
+            id="tags"
+            placeholder="Nhập các từ khóa, cách nhau bằng dấu phẩy"
+          >
         </label>
 
-        <section class="quality-panel full" id="qualityPanel">
+        <section
+          class="quality-panel full"
+          id="qualityPanel"
+        >
           <div class="quality-heading">
             <div>
               <strong>Kiểm định chất lượng</strong>
-              <p id="qualitySummary">Nhập nội dung để xem đánh giá.</p>
+              <p id="qualitySummary">
+                Nhập nội dung để xem đánh giá.
+              </p>
             </div>
-            <span id="qualityScore" class="quality-score">--</span>
+
+            <span
+              id="qualityScore"
+              class="quality-score"
+            >
+              --
+            </span>
           </div>
-          <ul id="qualityIssues" class="quality-issues"></ul>
+
+          <ul
+            id="qualityIssues"
+            class="quality-issues"
+          ></ul>
         </section>
       </div>
 
-      <div id="formErrors" class="form-errors" hidden></div>
+      <div
+        id="formErrors"
+        class="form-errors"
+        hidden
+      ></div>
 
       <div class="dialog-actions">
-        <button type="button" id="btnCancel" class="btn secondary">Hủy</button>
-        <button type="submit" class="btn primary">Lưu câu hỏi</button>
+        <button
+          type="button"
+          id="btnCancel"
+          class="btn secondary"
+        >
+          Hủy
+        </button>
+
+        <button
+          type="submit"
+          class="btn primary"
+        >
+          Lưu câu hỏi
+        </button>
       </div>
     </form>
   </dialog>
 
+  <!-- HỘP THOẠI DUYỆT CÂU HỎI -->
+  <dialog
+    id="reviewDialog"
+    class="review-dialog"
+  >
+    <form
+      method="dialog"
+      class="review-form"
+    >
+      <div class="dialog-header">
+        <div>
+          <h2>Duyệt câu hỏi</h2>
+          <p id="reviewPosition">Câu hỏi</p>
+        </div>
 
+        <button
+          type="button"
+          id="btnCloseReview"
+          class="icon-btn"
+          aria-label="Đóng"
+        >
+          ×
+        </button>
+      </div>
+
+      <div
+        class="review-meta"
+        id="reviewMeta"
+      ></div>
+
+      <section class="review-question-card">
+        <div
+          class="review-code"
+          id="reviewCode"
+        ></div>
+
+        <h3 id="reviewContent"></h3>
+
+        <div
+          id="reviewOptions"
+          class="review-options"
+        ></div>
+      </section>
+
+      <section class="review-section">
+        <h3>Giải thích đáp án</h3>
+        <p id="reviewExplanation"></p>
+      </section>
+
+      <section class="review-section">
+        <div class="review-quality-heading">
+          <h3>Kiểm định tự động</h3>
+
+          <span
+            id="reviewQualityScore"
+            class="quality-score"
+          >
+            --
+          </span>
+        </div>
+
+        <p id="reviewQualitySummary"></p>
+
+        <ul
+          id="reviewQualityIssues"
+          class="quality-issues"
+        ></ul>
+      </section>
+
+      <section class="review-section review-extra">
+        <div>
+          <strong>Từ khóa:</strong>
+          <span id="reviewTags"></span>
+        </div>
+
+        <div>
+          <strong>Trạng thái:</strong>
+          <span id="reviewStatus"></span>
+        </div>
+      </section>
+
+      <div class="review-navigation">
+        <button
+          type="button"
+          id="btnReviewPrevious"
+          class="btn secondary"
+        >
+          ← Câu trước
+        </button>
+
+        <button
+          type="button"
+          id="btnReviewNext"
+          class="btn secondary"
+        >
+          Câu sau →
+        </button>
+      </div>
+
+      <div class="dialog-actions review-actions">
+        <button
+          type="button"
+          id="btnReviewEdit"
+          class="btn secondary"
+        >
+          Sửa câu hỏi
+        </button>
+
+        <button
+          type="button"
+          id="btnReviewDraft"
+          class="btn warning-button"
+        >
+          Chuyển về Nháp
+        </button>
+
+        <button
+          type="button"
+          id="btnReviewApprove"
+          class="btn primary"
+        >
+          Duyệt câu hỏi
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- HỘP THOẠI NHẬP EXCEL / CSV -->
   <dialog id="bulkImportDialog">
-    <form method="dialog" class="bulk-form">
+    <form
+      method="dialog"
+      class="bulk-form"
+    >
       <div class="dialog-header">
         <div>
           <h2>Nhập câu hỏi hàng loạt</h2>
           <p>Chọn tệp Excel hoặc CSV theo đúng mẫu cột.</p>
         </div>
-        <button type="button" id="btnCloseBulkDialog" class="icon-btn" aria-label="Đóng">×</button>
+
+        <button
+          type="button"
+          id="btnCloseBulkDialog"
+          class="icon-btn"
+          aria-label="Đóng"
+        >
+          ×
+        </button>
       </div>
+
       <div class="import-help">
-        <strong>Các cột bắt buộc:</strong> grade, topic, lesson, lessonName, level, content, optionA, optionB, optionC, optionD, correctAnswer, explanation. Cột book có thể bỏ trống; ứng dụng tự dùng “Kết nối tri thức”.
-        <br><strong>correctAnswer:</strong> nhập A/B/C/D hoặc 0/1/2/3.
+        <strong>Các cột bắt buộc:</strong>
+        grade, topic, lesson, lessonName, level, content,
+        optionA, optionB, optionC, optionD, correctAnswer,
+        explanation.
+
+        Cột book có thể bỏ trống; ứng dụng tự dùng
+        “Kết nối tri thức”.
+
+        <br>
+
+        <strong>correctAnswer:</strong>
+        nhập A/B/C/D hoặc 0/1/2/3.
       </div>
-      <div id="bulkSummary" class="bulk-summary"></div>
+
+      <div
+        id="bulkSummary"
+        class="bulk-summary"
+      ></div>
+
       <div class="table-wrapper preview-wrapper">
         <table>
-          <thead><tr><th>Dòng</th><th>Trạng thái</th><th>Nội dung</th><th>Lỗi</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Dòng</th>
+              <th>Trạng thái</th>
+              <th>Nội dung</th>
+              <th>Lỗi</th>
+            </tr>
+          </thead>
+
           <tbody id="bulkPreviewBody"></tbody>
         </table>
       </div>
+
       <div class="dialog-actions">
-        <button type="button" id="btnChooseBulkFile" class="btn secondary">Chọn tệp khác</button>
-        <button type="button" id="btnConfirmBulkImport" class="btn primary" disabled>Nhập câu hợp lệ</button>
+        <button
+          type="button"
+          id="btnChooseBulkFile"
+          class="btn secondary"
+        >
+          Chọn tệp khác
+        </button>
+
+        <button
+          type="button"
+          id="btnConfirmBulkImport"
+          class="btn primary"
+          disabled
+        >
+          Nhập câu hợp lệ
+        </button>
       </div>
     </form>
   </dialog>
 
+  <!-- HỘP THOẠI KIỂM ĐỊNH TOÀN BỘ -->
   <dialog id="validationDialog">
-    <form method="dialog" class="validation-form">
+    <form
+      method="dialog"
+      class="validation-form"
+    >
       <div class="dialog-header">
         <div>
           <h2>Kết quả kiểm định toàn bộ</h2>
           <p id="validationSummary"></p>
         </div>
-        <button type="button" id="btnCloseValidationDialog" class="icon-btn" aria-label="Đóng">×</button>
+
+        <button
+          type="button"
+          id="btnCloseValidationDialog"
+          class="icon-btn"
+          aria-label="Đóng"
+        >
+          ×
+        </button>
       </div>
+
       <div class="table-wrapper preview-wrapper">
         <table>
-          <thead><tr><th>Mã</th><th>Điểm</th><th>Kết quả</th><th>Vấn đề cần xem</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Mã</th>
+              <th>Điểm</th>
+              <th>Kết quả</th>
+              <th>Vấn đề cần xem</th>
+            </tr>
+          </thead>
+
           <tbody id="validationTableBody"></tbody>
         </table>
       </div>
+
       <div class="dialog-actions">
-        <button type="button" id="btnExportValidation" class="btn secondary">Xuất báo cáo CSV</button>
-        <button type="button" id="btnCloseValidationBottom" class="btn primary">Đóng</button>
+        <button
+          type="button"
+          id="btnExportValidation"
+          class="btn secondary"
+        >
+          Xuất báo cáo CSV
+        </button>
+
+        <button
+          type="button"
+          id="btnCloseValidationBottom"
+          class="btn primary"
+        >
+          Đóng
+        </button>
       </div>
     </form>
   </dialog>
 
-
+  <!-- HỘP THOẠI CÀI ĐẶT GOOGLE SHEETS -->
   <dialog id="syncSettingsDialog">
-    <form id="syncSettingsForm" method="dialog" class="sync-form">
+    <form
+      id="syncSettingsForm"
+      method="dialog"
+      class="sync-form"
+    >
       <div class="dialog-header">
         <div>
           <h2>Kết nối Google Sheets</h2>
           <p>Lưu tập trung thông qua Google Apps Script Web App.</p>
         </div>
-        <button type="button" id="btnCloseSyncSettings" class="icon-btn" aria-label="Đóng">×</button>
+
+        <button
+          type="button"
+          id="btnCloseSyncSettings"
+          class="icon-btn"
+          aria-label="Đóng"
+        >
+          ×
+        </button>
       </div>
 
       <div class="sync-note">
-        Dán URL kết thúc bằng <code>/exec</code> và mã truy cập được tạo trong Google Apps Script.
+        Dán URL kết thúc bằng <code>/exec</code>
+        và mã truy cập được tạo trong Google Apps Script.
+
         Không ghi mã truy cập trực tiếp vào mã nguồn GitHub.
       </div>
 
       <div class="form-grid">
         <label class="full">
           URL Google Apps Script Web App
-          <input id="gasWebAppUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec">
+          <input
+            id="gasWebAppUrl"
+            type="url"
+            placeholder="https://script.google.com/macros/s/.../exec"
+          >
         </label>
+
         <label class="full">
           Mã truy cập
-          <input id="gasAccessToken" type="password" autocomplete="off" placeholder="Mã trong sheet CauHinh">
+          <input
+            id="gasAccessToken"
+            type="password"
+            autocomplete="off"
+            placeholder="Mã trong sheet CauHinh"
+          >
         </label>
+
         <label class="sync-checkbox full">
-          <input id="autoSyncEnabled" type="checkbox" checked>
-          <span>Tự động ghi lên Google Sheets sau khi thay đổi dữ liệu</span>
+          <input
+            id="autoSyncEnabled"
+            type="checkbox"
+            checked
+          >
+
+          <span>
+            Tự động ghi lên Google Sheets sau khi thay đổi dữ liệu
+          </span>
         </label>
       </div>
 
-      <div id="syncTestResult" class="sync-test-result" hidden></div>
+      <div
+        id="syncTestResult"
+        class="sync-test-result"
+        hidden
+      ></div>
 
       <div class="dialog-actions sync-actions">
-        <button type="button" id="btnDisconnectCloud" class="btn danger-outline-light">Ngắt kết nối</button>
+        <button
+          type="button"
+          id="btnDisconnectCloud"
+          class="btn danger-outline-light"
+        >
+          Ngắt kết nối
+        </button>
+
         <span class="action-spacer"></span>
-        <button type="button" id="btnTestCloud" class="btn secondary">Kiểm tra kết nối</button>
-        <button type="button" id="btnPullCloud" class="btn secondary">Tải từ Sheets</button>
-        <button type="button" id="btnPushCloud" class="btn secondary">Ghi lên Sheets</button>
-        <button type="submit" class="btn primary">Lưu cài đặt</button>
+
+        <button
+          type="button"
+          id="btnTestCloud"
+          class="btn secondary"
+        >
+          Kiểm tra kết nối
+        </button>
+
+        <button
+          type="button"
+          id="btnPullCloud"
+          class="btn secondary"
+        >
+          Tải từ Sheets
+        </button>
+
+        <button
+          type="button"
+          id="btnPushCloud"
+          class="btn secondary"
+        >
+          Ghi lên Sheets
+        </button>
+
+        <button
+          type="submit"
+          class="btn primary"
+        >
+          Lưu cài đặt
+        </button>
       </div>
     </form>
   </dialog>
 
+  <!-- HỘP THOẠI CHỌN HƯỚNG ĐỒNG BỘ -->
   <dialog id="syncChoiceDialog">
-    <form method="dialog" class="sync-form">
+    <form
+      method="dialog"
+      class="sync-form"
+    >
       <div class="dialog-header">
         <div>
           <h2>Đồng bộ dữ liệu</h2>
           <p>Chọn hướng đồng bộ phù hợp.</p>
         </div>
-        <button type="button" id="btnCloseSyncChoice" class="icon-btn" aria-label="Đóng">×</button>
-      </div>
-      <div class="sync-choice-grid">
-        <button type="button" id="btnSyncPullChoice" class="sync-choice-card">
-          <strong>Tải từ Google Sheets</strong>
-          <span>Thay dữ liệu trên thiết bị bằng ngân hàng đang lưu tập trung.</span>
+
+        <button
+          type="button"
+          id="btnCloseSyncChoice"
+          class="icon-btn"
+          aria-label="Đóng"
+        >
+          ×
         </button>
-        <button type="button" id="btnSyncPushChoice" class="sync-choice-card">
+      </div>
+
+      <div class="sync-choice-grid">
+        <button
+          type="button"
+          id="btnSyncPullChoice"
+          class="sync-choice-card"
+        >
+          <strong>Tải từ Google Sheets</strong>
+          <span>
+            Thay dữ liệu trên thiết bị bằng ngân hàng đang lưu tập trung.
+          </span>
+        </button>
+
+        <button
+          type="button"
+          id="btnSyncPushChoice"
+          class="sync-choice-card"
+        >
           <strong>Ghi lên Google Sheets</strong>
-          <span>Thay dữ liệu trên Sheets bằng ngân hàng hiện có trên thiết bị.</span>
+          <span>
+            Thay dữ liệu trên Sheets bằng ngân hàng hiện có trên thiết bị.
+          </span>
         </button>
       </div>
     </form>
   </dialog>
 
+  <!-- MẪU MỘT DÒNG CÂU HỎI -->
   <template id="rowTemplate">
     <tr>
       <td class="col-id"></td>
@@ -416,16 +893,38 @@
       <td class="col-answer"></td>
       <td class="col-quality"></td>
       <td class="col-status"></td>
+
       <td class="col-actions">
-        <button class="btn-small edit">Sửa</button>
-        <button class="btn-small duplicate">Nhân bản</button>
-        <button class="btn-small validate">Kiểm định</button>
-        <button class="btn-small delete">Ngừng dùng</button>
+        <button class="btn-small review">
+          Duyệt
+        </button>
+
+        <button class="btn-small edit">
+          Sửa
+        </button>
+
+        <button class="btn-small duplicate">
+          Nhân bản
+        </button>
+
+        <button class="btn-small validate">
+          Kiểm định
+        </button>
+
+        <button class="btn-small delete">
+          Ngừng dùng
+        </button>
       </td>
     </tr>
   </template>
 
+  <!-- THƯ VIỆN ĐỌC / XUẤT EXCEL -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script type="module" src="js/app.js?v=4.2"></script>
+
+  <!-- MÃ JAVASCRIPT CHÍNH -->
+  <script
+    type="module"
+    src="js/app.js?v=4.3"
+  ></script>
 </body>
 </html>
