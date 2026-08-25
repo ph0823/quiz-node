@@ -85,7 +85,7 @@ function bindEvents() {
   els.fileImport.addEventListener("change", importJson);
   els.fileBulkImport.addEventListener("change", readBulkFile);
   els.questionForm.addEventListener("submit", saveQuestion);
-  els.syncSettingsForm.addEventListener("submit", saveSyncSettings);
+  els.syncSettingsForm.addEventListener("submit", (e) => saveSyncConfig(e));
   els.questionTableBody.addEventListener("click", handleTableAction);
 
   on("grade", "change", refreshTopicOptions);
@@ -775,7 +775,9 @@ function loadSyncConfig() {
   }
 }
 
-function saveSyncConfig() {
+function saveSyncConfig(e) {
+  if (e) e.preventDefault(); // Chặn reload/submit mặc định của form
+
   const url = valueOf("gasWebAppUrl").replace(/\/+$/, "");
   const token = valueOf("gasAccessToken");
   const autoSync = document.querySelector("#autoSyncEnabled")?.checked !== false;
