@@ -8,11 +8,22 @@ const DEFAULT_BOOK = "Kết nối tri thức";
 const state = {
   questions: [],
   catalog: { lessons: [] },
+
+  // Mã câu hỏi đang được sửa.
   editingId: null,
+
+  // Mã câu hỏi đang được hiển thị trong cửa sổ duyệt.
+  reviewQuestionId: null,
+
   bulkRows: [],
   validationRows: [],
+
   sync: {
-    config: { url: "", token: "", autoSync: true },
+    config: {
+      url: "",
+      token: "",
+      autoSync: true,
+    },
     ready: false,
     timer: null,
     syncing: false,
@@ -45,13 +56,71 @@ async function init() {
 
 function cacheElements() {
   [
-    "questionTableBody", "emptyState", "resultCount", "statTotal", "statNB", "statTH", "statVD",
-    "statApproved", "statNeedsReview", "questionDialog", "questionForm", "dialogTitle", "formErrors",
-    "fileImport", "fileBulkImport", "bulkImportDialog", "bulkPreviewBody", "bulkSummary",
-    "btnConfirmBulkImport", "qualityPanel", "qualitySummary", "qualityScore", "qualityIssues",
-    "validationDialog", "validationSummary", "validationTableBody",
-    "syncStatus", "syncSettingsDialog", "syncSettingsForm", "syncTestResult", "syncChoiceDialog",
-  ].forEach((id) => { els[id] = document.querySelector(`#${id}`); });
+    // Danh sách và thống kê.
+    "questionTableBody",
+    "emptyState",
+    "resultCount",
+    "statTotal",
+    "statNB",
+    "statTH",
+    "statVD",
+    "statApproved",
+    "statNeedsReview",
+
+    // Biểu mẫu thêm và sửa câu hỏi.
+    "questionDialog",
+    "questionForm",
+    "dialogTitle",
+    "formErrors",
+    "qualityPanel",
+    "qualitySummary",
+    "qualityScore",
+    "qualityIssues",
+
+    // Nhập dữ liệu.
+    "fileImport",
+    "fileBulkImport",
+    "bulkImportDialog",
+    "bulkPreviewBody",
+    "bulkSummary",
+    "btnConfirmBulkImport",
+
+    // Kiểm định toàn bộ.
+    "validationDialog",
+    "validationSummary",
+    "validationTableBody",
+
+    // Hộp thoại duyệt câu hỏi.
+    "reviewDialog",
+    "reviewPosition",
+    "reviewMeta",
+    "reviewCode",
+    "reviewContent",
+    "reviewOptions",
+    "reviewExplanation",
+    "reviewQualityScore",
+    "reviewQualitySummary",
+    "reviewQualityIssues",
+    "reviewTags",
+    "reviewStatus",
+
+    // Các nút trong hộp thoại duyệt.
+    "btnCloseReview",
+    "btnReviewPrevious",
+    "btnReviewNext",
+    "btnReviewEdit",
+    "btnReviewDraft",
+    "btnReviewApprove",
+
+    // Đồng bộ Google Sheets.
+    "syncStatus",
+    "syncSettingsDialog",
+    "syncSettingsForm",
+    "syncTestResult",
+    "syncChoiceDialog",
+  ].forEach((id) => {
+    els[id] = document.querySelector(`#${id}`);
+  });
 }
 
 function bindEvents() {
@@ -80,6 +149,18 @@ function bindEvents() {
   on("btnDisconnectCloud", "click", disconnectCloud);
   on("btnSyncPullChoice", "click", async () => { els.syncChoiceDialog.close(); await pullFromCloud(true); });
   on("btnSyncPushChoice", "click", async () => { els.syncChoiceDialog.close(); await pushToCloud(true); });
+
+    // Đóng cửa sổ duyệt câu hỏi.
+  on("btnCloseReview", "click", closeReviewDialog);
+
+  // Chuyển qua lại giữa các câu hỏi đang hiển thị theo bộ lọc.
+  on("btnReviewPrevious", "click", () => moveReviewQuestion(-1));
+  on("btnReviewNext", "click", () => moveReviewQuestion(1));
+
+  // Các thao tác duyệt.
+  on("btnReviewEdit", "click", editReviewedQuestion);
+  on("btnReviewDraft", "click", moveReviewedQuestionToDraft);
+  on("btnReviewApprove", "click", approveReviewedQuestion);
 
   els.btnConfirmBulkImport.addEventListener("click", confirmBulkImport);
   els.fileImport.addEventListener("change", importJson);
@@ -572,14 +653,50 @@ function exportValidationCsv() {
 
 function handleTableAction(event) {
   const button = event.target.closest("button");
-  if (!button) return;
-  const id = button.closest("tr")?.dataset.id;
-  const question = state.questions.find((item) => item.id === id);
-  if (!question) return;
-  if (button.classList.contains("edit")) openEditDialog(question);
-  if (button.classList.contains("duplicate")) duplicateQuestion(question);
-  if (button.classList.contains("validate")) showSingleValidation(question);
-  if (button.classList.contains("delete")) deactivateQuestion(question);
+
+  if (!button) {
+    return;
+  }
+
+  const row = button.closest("tr");
+  const id = row?.dataset.id;
+
+  const question = state.questions.find(
+    (item) => item.id === id
+  );
+
+  if (!question) {
+    return;
+  }
+
+  // Mở cửa sổ duyệt đầy đủ câu hỏi.
+  if (button.classList.contains("review")) {
+    openReviewDialog(question);
+    return;
+  }
+
+  // Mở biểu mẫu sửa.
+  if (button.classList.contains("edit")) {
+    openEditDialog(question);
+    return;
+  }
+
+  // Tạo bản sao.
+  if (button.classList.contains("duplicate")) {
+    duplicateQuestion(question);
+    return;
+  }
+
+  // Hiển thị kết quả kiểm định nhanh.
+  if (button.classList.contains("validate")) {
+    showSingleValidation(question);
+    return;
+  }
+
+  // Chuyển sang trạng thái ngừng sử dụng.
+  if (button.classList.contains("delete")) {
+    deactivateQuestion(question);
+  }
 }
 
 function showSingleValidation(question) {
@@ -588,6 +705,522 @@ function showSingleValidation(question) {
     ? quality.issues.map((issue, index) => `${index + 1}. ${issue.message}`).join("\n")
     : "Không phát hiện vấn đề trong các kiểm tra tự động.";
   alert(`${question.id}\nĐiểm chất lượng: ${quality.score}/100 — ${QUALITY_LABELS[quality.grade]}\n\n${message}`);
+}
+
+/**
+ * Mở cửa sổ duyệt cho một câu hỏi.
+ *
+ * @param {object} question Câu hỏi cần duyệt.
+ */
+function openReviewDialog(question) {
+  if (!question || !question.id) {
+    alert("Không tìm thấy câu hỏi cần duyệt.");
+    return;
+  }
+
+  state.reviewQuestionId = question.id;
+
+  renderReviewQuestion();
+
+  if (!els.reviewDialog.open) {
+    els.reviewDialog.showModal();
+  }
+}
+
+
+/**
+ * Đóng cửa sổ duyệt.
+ */
+function closeReviewDialog() {
+  state.reviewQuestionId = null;
+
+  if (els.reviewDialog?.open) {
+    els.reviewDialog.close();
+  }
+}
+
+
+/**
+ * Lấy câu hỏi đang được duyệt.
+ *
+ * @returns {object|null}
+ */
+function getReviewedQuestion() {
+  return state.questions.find(
+    (question) => question.id === state.reviewQuestionId
+  ) || null;
+}
+
+
+/**
+ * Lấy danh sách câu hỏi để chuyển câu trước và câu sau.
+ *
+ * Danh sách này tuân theo đúng bộ lọc đang áp dụng trên giao diện.
+ *
+ * @returns {object[]}
+ */
+function getReviewQuestionList() {
+  const filteredQuestions = getFilteredQuestions();
+
+  /*
+   * Nếu câu đang duyệt vẫn nằm trong danh sách đã lọc,
+   * dùng danh sách lọc để chuyển trước/sau.
+   */
+  const currentExists = filteredQuestions.some(
+    (question) => question.id === state.reviewQuestionId
+  );
+
+  if (currentExists) {
+    return filteredQuestions;
+  }
+
+  /*
+   * Nếu bộ lọc đã thay đổi và câu hiện tại không còn trong kết quả,
+   * dùng toàn bộ ngân hàng để cửa sổ duyệt không bị lỗi.
+   */
+  return [...state.questions].sort(
+    (a, b) =>
+      String(b.updatedAt).localeCompare(
+        String(a.updatedAt)
+      )
+  );
+}
+
+
+/**
+ * Hiển thị đầy đủ thông tin của câu hỏi đang duyệt.
+ */
+function renderReviewQuestion() {
+  const question = getReviewedQuestion();
+
+  if (!question) {
+    closeReviewDialog();
+    alert("Câu hỏi này không còn tồn tại trong ngân hàng.");
+    return;
+  }
+
+  const reviewQuestions = getReviewQuestionList();
+
+  const currentIndex = reviewQuestions.findIndex(
+    (item) => item.id === question.id
+  );
+
+  const quality = assessQuestion(
+    question,
+    question.id
+  );
+
+  /*
+   * Vị trí câu hỏi.
+   */
+  if (els.reviewPosition) {
+    els.reviewPosition.textContent =
+      currentIndex >= 0
+        ? `Câu ${currentIndex + 1}/${reviewQuestions.length}`
+        : "Câu hỏi";
+  }
+
+  /*
+   * Mã câu hỏi.
+   */
+  if (els.reviewCode) {
+    els.reviewCode.textContent = question.id;
+  }
+
+  /*
+   * Thông tin phân loại.
+   */
+  if (els.reviewMeta) {
+    els.reviewMeta.innerHTML = `
+      <span class="review-meta-item">
+        <strong>Khối:</strong>
+        Lớp ${escapeHtml(question.grade)}
+      </span>
+
+      <span class="review-meta-item">
+        <strong>Chủ đề:</strong>
+        ${escapeHtml(question.topic)}
+      </span>
+
+      <span class="review-meta-item">
+        <strong>Bài học:</strong>
+        ${escapeHtml(question.lesson)}
+        – ${escapeHtml(question.lessonName)}
+      </span>
+
+      <span class="review-meta-item">
+        <strong>Mức độ:</strong>
+        <span class="badge ${question.level.toLowerCase()}">
+          ${escapeHtml(
+            LEVEL_LABELS[question.level] || question.level
+          )}
+        </span>
+      </span>
+    `;
+  }
+
+  /*
+   * Nội dung câu hỏi.
+   */
+  if (els.reviewContent) {
+    els.reviewContent.textContent = question.content;
+  }
+
+  /*
+   * Hiển thị đầy đủ bốn phương án.
+   */
+  if (els.reviewOptions) {
+    els.reviewOptions.innerHTML = question.options
+      .map((option, index) => {
+        const isCorrect =
+          index === question.correctAnswer;
+
+        return `
+          <div
+            class="review-option ${
+              isCorrect ? "correct-option" : ""
+            }"
+          >
+            <div class="review-option-label">
+              ${answerLetter(index)}
+            </div>
+
+            <div class="review-option-content">
+              ${escapeHtml(option)}
+            </div>
+
+            ${
+              isCorrect
+                ? `
+                  <span class="correct-answer-mark">
+                    Đáp án đúng
+                  </span>
+                `
+                : ""
+            }
+          </div>
+        `;
+      })
+      .join("");
+  }
+
+  /*
+   * Giải thích đáp án.
+   */
+  if (els.reviewExplanation) {
+    els.reviewExplanation.textContent =
+      question.explanation ||
+      "Chưa có phần giải thích.";
+  }
+
+  /*
+   * Từ khóa.
+   */
+  if (els.reviewTags) {
+    els.reviewTags.textContent =
+      question.tags?.length
+        ? question.tags.join(", ")
+        : "Chưa có";
+  }
+
+  /*
+   * Trạng thái hiện tại.
+   */
+  if (els.reviewStatus) {
+    els.reviewStatus.innerHTML = `
+      <span class="badge ${question.status}">
+        ${
+          STATUS_LABELS[question.status] ||
+          question.status
+        }
+      </span>
+    `;
+  }
+
+  /*
+   * Điểm chất lượng.
+   */
+  if (els.reviewQualityScore) {
+    els.reviewQualityScore.textContent =
+      quality.score;
+
+    els.reviewQualityScore.className =
+      `quality-score ${quality.grade}`;
+  }
+
+  /*
+   * Nội dung tóm tắt kiểm định.
+   */
+  if (els.reviewQualitySummary) {
+    if (quality.grade === "good") {
+      els.reviewQualitySummary.textContent =
+        "Câu hỏi đạt các kiểm tra tự động cơ bản.";
+    } else if (quality.grade === "blocking") {
+      els.reviewQualitySummary.textContent =
+        "Câu hỏi còn lỗi nghiêm trọng và chưa thể duyệt.";
+    } else {
+      els.reviewQualitySummary.textContent =
+        "Câu hỏi có cảnh báo cần giáo viên kiểm tra.";
+    }
+  }
+
+  /*
+   * Danh sách vấn đề kiểm định.
+   */
+  if (els.reviewQualityIssues) {
+    if (quality.issues.length === 0) {
+      els.reviewQualityIssues.innerHTML = `
+        <li class="quality-success">
+          Không phát hiện vấn đề trong các kiểm tra tự động.
+        </li>
+      `;
+    } else {
+      els.reviewQualityIssues.innerHTML =
+        quality.issues
+          .map(
+            (issue) => `
+              <li class="${issue.severity}">
+                ${escapeHtml(issue.message)}
+              </li>
+            `
+          )
+          .join("");
+    }
+  }
+
+  /*
+   * Điều khiển nút trước và sau.
+   */
+  if (els.btnReviewPrevious) {
+    els.btnReviewPrevious.disabled =
+      currentIndex <= 0;
+  }
+
+  if (els.btnReviewNext) {
+    els.btnReviewNext.disabled =
+      currentIndex < 0 ||
+      currentIndex >= reviewQuestions.length - 1;
+  }
+
+  /*
+   * Nút chuyển về nháp chỉ cần bật khi câu hỏi
+   * hiện không ở trạng thái nháp.
+   */
+  if (els.btnReviewDraft) {
+    els.btnReviewDraft.disabled =
+      question.status === "draft";
+
+    els.btnReviewDraft.textContent =
+      question.status === "draft"
+        ? "Đang ở trạng thái Nháp"
+        : "Chuyển về Nháp";
+  }
+
+  /*
+   * Nút duyệt.
+   */
+  if (els.btnReviewApprove) {
+    const hasBlockingError =
+      quality.grade === "blocking";
+
+    const alreadyApproved =
+      question.status === "approved";
+
+    els.btnReviewApprove.disabled =
+      hasBlockingError || alreadyApproved;
+
+    if (alreadyApproved) {
+      els.btnReviewApprove.textContent =
+        "Đã duyệt";
+    } else if (hasBlockingError) {
+      els.btnReviewApprove.textContent =
+        "Chưa thể duyệt";
+    } else {
+      els.btnReviewApprove.textContent =
+        "Duyệt câu hỏi";
+    }
+  }
+}
+
+
+/**
+ * Chuyển sang câu trước hoặc câu sau.
+ *
+ * @param {number} direction -1 là câu trước, 1 là câu sau.
+ */
+function moveReviewQuestion(direction) {
+  const reviewQuestions = getReviewQuestionList();
+
+  const currentIndex = reviewQuestions.findIndex(
+    (question) =>
+      question.id === state.reviewQuestionId
+  );
+
+  if (currentIndex < 0) {
+    return;
+  }
+
+  const nextIndex = currentIndex + direction;
+
+  if (
+    nextIndex < 0 ||
+    nextIndex >= reviewQuestions.length
+  ) {
+    return;
+  }
+
+  state.reviewQuestionId =
+    reviewQuestions[nextIndex].id;
+
+  renderReviewQuestion();
+}
+
+
+/**
+ * Mở biểu mẫu sửa câu hỏi đang duyệt.
+ */
+function editReviewedQuestion() {
+  const question = getReviewedQuestion();
+
+  if (!question) {
+    return;
+  }
+
+  if (els.reviewDialog?.open) {
+    els.reviewDialog.close();
+  }
+
+  openEditDialog(question);
+}
+
+
+/**
+ * Chuyển câu hỏi đang duyệt về trạng thái Nháp.
+ */
+function moveReviewedQuestionToDraft() {
+  const question = getReviewedQuestion();
+
+  if (!question) {
+    return;
+  }
+
+  if (question.status === "draft") {
+    return;
+  }
+
+  const confirmed = confirm(
+    `Chuyển câu hỏi ${question.id} về trạng thái Nháp?`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  question.status = "draft";
+  question.updatedAt = new Date().toISOString();
+
+  /*
+   * persist() vừa lưu localStorage,
+   * vừa lên lịch đồng bộ Google Sheets nếu đã bật.
+   */
+  persist();
+
+  render();
+  renderReviewQuestion();
+}
+
+
+/**
+ * Duyệt câu hỏi đang hiển thị.
+ */
+function approveReviewedQuestion() {
+  const question = getReviewedQuestion();
+
+  if (!question) {
+    return;
+  }
+
+  const quality = assessQuestion(
+    question,
+    question.id
+  );
+
+  /*
+   * Câu có lỗi nghiêm trọng không được duyệt.
+   */
+  if (quality.grade === "blocking") {
+    const blockingMessages = quality.issues
+      .filter(
+        (issue) => issue.severity === "blocking"
+      )
+      .map(
+        (issue, index) =>
+          `${index + 1}. ${issue.message}`
+      )
+      .join("\n");
+
+    alert(
+      "Câu hỏi còn lỗi nghiêm trọng và chưa thể duyệt.\n\n" +
+      blockingMessages
+    );
+
+    return;
+  }
+
+  /*
+   * Câu có cảnh báo yêu cầu giáo viên xác nhận.
+   */
+  if (quality.grade === "warning") {
+    const warningMessages = quality.issues
+      .map(
+        (issue, index) =>
+          `${index + 1}. ${issue.message}`
+      )
+      .join("\n");
+
+    const confirmed = confirm(
+      "Câu hỏi còn các cảnh báo sau:\n\n" +
+      warningMessages +
+      "\n\nBạn vẫn muốn duyệt câu hỏi này?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+  }
+
+  question.status = "approved";
+  question.updatedAt = new Date().toISOString();
+
+  /*
+   * Lưu trên máy và tự động đồng bộ Sheets.
+   */
+  persist();
+
+  /*
+   * Lưu danh sách trước khi render để tìm câu kế tiếp.
+   */
+  const reviewQuestions = getReviewQuestionList();
+
+  const currentIndex = reviewQuestions.findIndex(
+    (item) => item.id === question.id
+  );
+
+  render();
+
+  /*
+   * Nếu còn câu tiếp theo thì tự động chuyển sang câu tiếp.
+   * Nếu đang ở câu cuối, giữ nguyên câu hiện tại.
+   */
+  if (
+    currentIndex >= 0 &&
+    currentIndex < reviewQuestions.length - 1
+  ) {
+    state.reviewQuestionId =
+      reviewQuestions[currentIndex + 1].id;
+  }
+
+  renderReviewQuestion();
 }
 
 function duplicateQuestion(question) {
