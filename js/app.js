@@ -547,12 +547,41 @@ function assessQuestion(question, excludedId = null) {
     add("warning", "combo-option", "Phương án kết hợp có thể làm giảm chất lượng câu hỏi.", 5);
   }
 
-  const lengths = options.map((option) => option.length).filter((length) => length > 0);
-  if (lengths.length === 4 && answer) {
-    const others = lengths.filter((_, index) => index !== question.correctAnswer);
-    const averageOther = others.reduce((sum, value) => sum + value, 0) / others.length;
-    if (answer.length >= Math.max(averageOther * 1.65, averageOther + 18)) {
-      add("warning", "answer-length", "Đáp án đúng dài nổi bật so với các phương án nhiễu.", 10);
+  // Cảnh báo khi đáp án đúng là phương án dài nhất.  
+  const optionLengths = options.map((option) =>
+    normalizeText(option)
+      .replace(/\s/g, "")
+      .length
+  );
+
+  if (
+    optionLengths.length === 4 &&
+    question.correctAnswer >= 0 &&
+    question.correctAnswer <= 3 &&
+    answer
+  ) {
+    const correctLength =
+      optionLengths[question.correctAnswer];
+
+    const distractorLengths =
+      optionLengths.filter(
+        (_, index) =>
+          index !== question.correctAnswer
+      );
+
+    const longestDistractor =
+      Math.max(...distractorLengths);
+
+    if (correctLength > longestDistractor) {
+      const difference =
+        correctLength - longestDistractor;
+
+      add(
+        "warning",
+        "answer-longest",
+        `Đáp án đúng là phương án dài nhất, dài hơn phương án nhiễu dài nhất ${difference} kí tự; học sinh có thể đoán đáp án dựa vào độ dài.`,
+        10
+      );
     }
   }
 
